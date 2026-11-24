@@ -16,8 +16,12 @@ function rootVariable(css: string, name: string): string {
   return match[1];
 }
 
-/** The families next/font writes into `variable`: the face, its metric fallback and `fallback`. */
+/** The families next/font writes into `variable`: the face, its metric fallback and `fallback`.
+ *  This fork declares the family variables in globals.css instead (bundled
+ *  @fontsource faces), so a declared variable is read from there first. */
 function nextFontFamilies(variable: string): string[] {
+  const declared = webCss.match(new RegExp(`^\\s*${variable}:\\s*([^;]+);`, "m"))?.[1];
+  if (declared) return families(declared);
   const call = layout.split(/\n(?=const \w+ = \w+\()/).find((block) => block.includes(`variable: "${variable}"`));
   if (!call) throw new Error(`no next/font call declares ${variable}`);
   const fallback = call.match(/fallback:\s*\[([^\]]*)\]/)?.[1] ?? "";

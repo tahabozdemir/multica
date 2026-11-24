@@ -1,6 +1,18 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Inter, Geist_Mono, JetBrains_Mono, Source_Serif_4 } from "next/font/google";
+// Fonts are the bundled @fontsource-variable faces the desktop app ships
+// (apps/desktop/src/renderer/src/main.tsx), not next/font/google, so neither
+// `next build` nor `next dev` contacts fonts.googleapis.com. Each stylesheet
+// declares every subset with unicode-range, so Latin Extended, Cyrillic, and
+// Greek text keeps its face. app/globals.css maps the families onto the
+// --font-inter / --font-geist-mono / --font-jetbrains-mono /
+// --font-source-serif variables that next/font used to set.
+import "@fontsource-variable/inter/opsz.css";
+import "@fontsource-variable/inter/opsz-italic.css";
+import "@fontsource-variable/source-serif-4/index.css";
+import "@fontsource-variable/source-serif-4/wght-italic.css";
+import "@fontsource-variable/geist-mono/index.css";
+import "@fontsource-variable/jetbrains-mono/index.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@multica/ui/components/ui/sonner";
 import { cn } from "@multica/ui/lib/utils";
@@ -17,61 +29,6 @@ import { resolveGoogleAnalyticsId } from "@/config/google-analytics";
 import { GoogleAnalytics } from "@/components/google-analytics";
 import "./globals.css";
 
-// Inter is the Latin UI face. next/font produces a hashed family (`__Inter_xxx`)
-// plus a synthetic size-adjusted fallback face to prevent FOUT layout shift —
-// both are exposed under the `--font-inter` CSS variable.
-//
-// The full `--font-sans` stack (Inter + the per-locale CJK fallback chain) is
-// assembled in static CSS in ./globals.css, not here: it must be overridable per
-// `<html lang>` (Japanese Kanji are Han ideographs and need a Japanese-first CJK
-// stack), and a hashed family name can only be referenced from CSS via a variable.
-// Keeping the CJK chain in CSS also keeps it CSP-safe and in sync with the desktop
-// app, which defines the same chain in apps/desktop/src/renderer/src/globals.css.
-//
-// Italic is loaded explicitly: `style` defaults to `["normal"]`, and without a real
-// italic face the ~20 semantic italic labels (chat empty states, model-picker's
-// "Managed by runtime", dashboard/squad placeholders) plus every markdown <em> and
-// blockquote rendered as browser-synthesized oblique. Keep in sync with desktop's
-// `@fontsource-variable/inter/opsz-italic.css` import.
-//
-// The `opsz` axis lets Inter draw each size with its own cut: 14px and below
-// keep the open text design, while titles and headings get Inter Display's
-// tighter spacing and finer details automatically (`font-optical-sizing: auto`
-// is the CSS default). Keep in sync with desktop's `opsz.css` import.
-const inter = Inter({
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  axes: ["opsz"],
-  variable: "--font-inter",
-});
-// Mono font has no explicit CJK fallback: CJK chars in code blocks are inherently
-// non-aligned with a mono grid (Chinese is proportional), so listing CJK fonts
-// here would falsely signal alignment guarantees. Browser default fallback handles
-// the rare mixed case correctly. `--font-mono` itself is composed in
-// ./globals.css so the Appearance code font can replace it without losing the
-// Geist family, which the monospace UI font still uses.
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
-});
-// Optional code font from the Appearance settings. Not preloaded: the face is
-// only fetched once something renders with it.
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
-  preload: false,
-});
-// Editorial serif used for onboarding headlines and the Appearance "Serif"
-// font. Italic support for h1 em accents (e.g. "...on one shared board.").
-// Only loaded on routes that render the font; layout-shift-prevention handled
-// by next/font's synthetic fallback metrics, same as Inter. No `fallback`:
-// next/font writes it into the variable, and the stacks built on it in
-// ./globals.css differ in whether they may end with a generic family.
-const sourceSerif = Source_Serif_4({
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  variable: "--font-source-serif",
-});
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -159,7 +116,7 @@ export default async function RootLayout({
     <html
       lang={HTML_LANG[locale]}
       suppressHydrationWarning
-      className={cn("antialiased font-sans h-full", inter.variable, geistMono.variable, jetbrainsMono.variable, sourceSerif.variable)}
+      className={cn("antialiased font-sans h-full")}
     >
       <body className="h-full overflow-hidden">
         {/*

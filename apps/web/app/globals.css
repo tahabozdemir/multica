@@ -18,8 +18,8 @@
 @source "../../../packages/views/**/*.{ts,tsx}";
 @source "../../../packages/ee/**/*.{ts,tsx}";
 
-/* Font stack. `--font-inter` is the next/font Inter family (+ its synthetic
-   size-adjusted fallback), set on <html> by inter.variable in app/layout.tsx.
+/* Font stack. `--font-inter` and the other family variables name the bundled
+   @fontsource-variable faces imported in app/layout.tsx (same as desktop).
    We compose `--font-sans` here in static CSS — rather than baking the CJK tail
    into next/font's `fallback` — so it can be overridden per `<html lang>` and
    stays CSP-safe (no inline <style>). Tailwind's `font-sans` utility resolves
@@ -31,6 +31,10 @@
    block, so ko users still get Korean fonts for Hangul). Kept in sync with
    apps/desktop/src/renderer/src/globals.css. */
 :root {
+  --font-inter: "Inter Variable", "Inter";
+  --font-geist-mono: "Geist Mono Variable", "Geist Mono";
+  --font-jetbrains-mono: "JetBrains Mono Variable", "JetBrains Mono";
+  --font-source-serif: "Source Serif 4 Variable", "Source Serif 4";
   /* --font-ui and --font-cjk are set by the Appearance settings
      (packages/core/appearance); unset, the stack is Inter + the CJK chain. */
   --font-sans: var(--font-ui, var(--font-inter)), var(--font-cjk, var(--font-cjk-sans));
