@@ -50,6 +50,7 @@ import { useInlineZoom, type InlineZoom } from "./hooks/use-inline-zoom";
 import { useThemeVersion } from "./hooks/use-theme-version";
 import { MermaidViewer } from "./mermaid-viewer";
 import { hashSource } from "./utils/source-hash";
+import { MERMAID_SECURE_KEYS, withoutRemoteMermaidImages } from "./utils/mermaid-offline";
 import type { Size } from "./utils/zoom-transform";
 
 type MermaidAPI = typeof import("mermaid").default;
@@ -429,6 +430,8 @@ export function MermaidDiagram({
         mermaid.initialize({
           startOnLoad: false,
           securityLevel: "strict",
+          // No network while rendering: see utils/mermaid-offline.ts.
+          secure: MERMAID_SECURE_KEYS,
           theme: "base",
           // Render labels as SVG <text> instead of Mermaid's default HTML-in-
           // <foreignObject>. Browsers do not rasterize foreignObject when an
@@ -443,7 +446,7 @@ export function MermaidDiagram({
           // pass over valid charts.
           suppressErrorRendering: true,
         });
-        const { svg: renderedSvg } = await mermaid.render(diagramId, chart);
+        const { svg: renderedSvg } = await mermaid.render(diagramId, withoutRemoteMermaidImages(chart));
         if (cancelled) return;
 
         const measured = getMermaidLayout(renderedSvg);
