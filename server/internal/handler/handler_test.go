@@ -42,6 +42,9 @@ const (
 )
 
 func TestMain(m *testing.M) {
+	// Upstream handler tests exercise upstream behavior; this fork's privacy
+	// tests turn MULTICA_PRIVACY_MODE back on with t.Setenv.
+	os.Setenv("MULTICA_PRIVACY_MODE", "0")
 	ctx := context.Background()
 	dbURL := os.Getenv("DATABASE_URL")
 	dbConfigured := dbURL != ""

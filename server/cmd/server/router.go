@@ -44,6 +44,7 @@ import (
 	"github.com/multica-ai/multica/server/internal/integrations/weixin"
 	obsmetrics "github.com/multica-ai/multica/server/internal/metrics"
 	"github.com/multica-ai/multica/server/internal/middleware"
+	"github.com/multica-ai/multica/server/internal/privacy"
 	"github.com/multica-ai/multica/server/internal/projectaccess"
 	"github.com/multica-ai/multica/server/internal/realtime"
 	"github.com/multica-ai/multica/server/internal/seatcapacity"
@@ -3095,8 +3096,15 @@ func optionalUUID(s string) pgtype.UUID {
 // MULTICA_THEME_REGISTRY_URL points it at another registry's index.json. A
 // URL that does not parse turns the store off rather than failing the boot.
 func themeStoreFromEnv() *themestore.Store {
+	indexURL := strings.TrimSpace(os.Getenv("MULTICA_THEME_REGISTRY_URL"))
+	// Privacy mode: only a registry the operator names explicitly; the
+	// default one is on GitHub.
+	if indexURL == "" && privacy.Enabled() {
+		slog.Info("theme store: turned off by MULTICA_PRIVACY_MODE (set MULTICA_THEME_REGISTRY_URL to use a registry)")
+		return nil
+	}
 	store, err := themestore.New(themestore.Config{
-		IndexURL: strings.TrimSpace(os.Getenv("MULTICA_THEME_REGISTRY_URL")),
+		IndexURL: indexURL,
 	})
 	if err != nil {
 		slog.Error("theme store: turned off", "error", err)

@@ -108,6 +108,9 @@ func fetchQoderCatalog(ctx context.Context, baseURL, token, kind string) ([]qode
 }
 
 func (h *Handler) ListQoderAgents(w http.ResponseWriter, r *http.Request) {
+	if refuseInPrivacyMode(w, "Qoder Cloud Agents") {
+		return
+	}
 	ws, ok := parseUUIDOrBadRequest(w, chi.URLParam(r, "id"), "workspace_id")
 	if !ok {
 		return
@@ -141,6 +144,9 @@ func (h *Handler) ListQoderAgents(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) ListQoderEnvironments(w http.ResponseWriter, r *http.Request) {
+	if refuseInPrivacyMode(w, "Qoder Cloud Agents") {
+		return
+	}
 	ws, ok := parseUUIDOrBadRequest(w, chi.URLParam(r, "id"), "workspace_id")
 	if !ok {
 		return

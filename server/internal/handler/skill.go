@@ -423,6 +423,9 @@ func (h *Handler) labelsBySkill(ctx context.Context, wsUUID pgtype.UUID, skillID
 }
 
 func (h *Handler) SearchSkills(w http.ResponseWriter, r *http.Request) {
+	if refuseInPrivacyMode(w, "skill registry search") {
+		return
+	}
 	query := strings.TrimSpace(r.URL.Query().Get("q"))
 	if query == "" {
 		writeError(w, http.StatusBadRequest, "query is required")
@@ -2397,6 +2400,9 @@ func (h *Handler) ImportSkill(w http.ResponseWriter, r *http.Request) {
 	// conflict tail via finishSkillImport.
 	if isMultipartForm(r) {
 		h.importSkillFromArchive(w, r, workspaceID, workspaceUUID, creatorUUID, creatorID)
+		return
+	}
+	if refuseInPrivacyMode(w, "importing a skill from a URL") {
 		return
 	}
 

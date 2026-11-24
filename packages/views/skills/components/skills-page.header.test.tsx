@@ -3,6 +3,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { configStore } from "@multica/core/config";
 import type { SkillSummary } from "@multica/core/types";
 import {
   EMPTY_SKILL_FILTERS,
@@ -113,6 +114,7 @@ function renderPage() {
 }
 
 beforeEach(() => {
+  configStore.getState().setPrivacyMode(true);
   vi.clearAllMocks();
   useSkillsViewStore.setState({
     sortField: "name",
@@ -221,6 +223,7 @@ describe("SkillsPage header", () => {
   });
 
   it("offers every way to add a skill from the + menu and opens the dialog on it", async () => {
+    configStore.getState().setPrivacyMode(false);
     const user = userEvent.setup();
     const header = renderPage();
 
@@ -237,6 +240,17 @@ describe("SkillsPage header", () => {
 
     await user.click(within(menu).getByRole("menuitem", { name: /^Import from URL/ }));
     expect(screen.getByTestId("create-dialog")).toHaveTextContent("url");
+  });
+
+  it("hides Import from URL in privacy mode", async () => {
+    configStore.getState().setPrivacyMode(true);
+    const user = userEvent.setup();
+    const header = renderPage();
+
+    await user.click(within(header).getByRole("button", { name: "New skill" }));
+    const menu = await screen.findByRole("menu");
+    expect(within(menu).queryByRole("menuitem", { name: /^Import from URL/ })).toBeNull();
+    expect(within(menu).getAllByRole("menuitem")).toHaveLength(3);
   });
 
   it("introduces skills when there are none and adds the first one from the intro", async () => {

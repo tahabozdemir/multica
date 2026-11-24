@@ -73,8 +73,6 @@ func TestGetConfigIncludesRuntimeAuthConfig(t *testing.T) {
 
 	t.Setenv("ALLOW_SIGNUP", "false")
 	t.Setenv("GOOGLE_CLIENT_ID", "google-client-id")
-	// Upstream behavior: this fork's privacy mode withholds the key.
-	t.Setenv("MULTICA_PRIVACY_MODE", "0")
 	t.Setenv("POSTHOG_API_KEY", "phc_test")
 	t.Setenv("POSTHOG_HOST", "https://eu.i.posthog.com")
 	t.Setenv("MULTICA_DAEMON_SERVER_URL", "")

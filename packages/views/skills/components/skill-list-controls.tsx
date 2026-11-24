@@ -9,6 +9,7 @@ import {
   Plus,
 } from "@multica/ui/icons";
 import { useQuery } from "@tanstack/react-query";
+import { useConfigStore } from "@multica/core/config";
 import { useWorkspaceId } from "@multica/core/hooks";
 import { labelListOptions } from "@multica/core/labels/queries";
 import type { Agent, Label, MemberWithUser } from "@multica/core/types";
@@ -324,13 +325,19 @@ export function SkillCreateMenu({
   align?: "start" | "end";
 }) {
   const { t } = useT("skills");
+  // Privacy mode: importing from a URL makes the server fetch from
+  // clawhub.ai / skills.sh / GitHub, which the server refuses.
+  const privacyMode = useConfigStore((s) => s.privacyMode);
+  const methods = privacyMode
+    ? SKILL_CREATE_METHODS.filter(({ key }) => key !== "url")
+    : SKILL_CREATE_METHODS;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         render={trigger ?? <CollectionCreateButton label={t(($) => $.page.new_skill)} />}
       />
       <DropdownMenuContent align={align} className="w-72">
-        {SKILL_CREATE_METHODS.map(({ key, icon: Icon }) => (
+        {methods.map(({ key, icon: Icon }) => (
           <DropdownMenuItem
             key={key}
             onClick={() => onCreate(key)}

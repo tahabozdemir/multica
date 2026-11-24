@@ -148,6 +148,9 @@ func (h *Handler) RefreshSkill(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusUnprocessableEntity, errSkillNotRefreshable.Error())
 		return
 	}
+	if refuseInPrivacyMode(w, "updating a skill from its source") {
+		return
+	}
 
 	httpClient := &http.Client{Timeout: 30 * time.Second}
 	ctx, cancel := context.WithTimeout(r.Context(), importFetchTimeout)
