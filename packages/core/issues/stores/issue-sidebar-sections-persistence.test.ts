@@ -7,12 +7,13 @@ import {
 } from "@multica/core/issues/stores";
 
 const STORAGE_KEY = "multica_issue_sidebar_sections";
-// An order saved while the sidebar still had Sub-issues and Details sections.
+// An order saved while the sidebar still had Sub-issues, Details, Waiting and
+// Duplicates sections; the last two are now the Relations section.
 const SAVED_ORDER = [
-  "properties", "quick_actions", "wakeups", "plugins", "parent", "sub_issues", "duplicates",
+  "properties", "quick_actions", "wakeups", "plugins", "parent", "sub_issues", "waiting", "duplicates",
   "pull_requests", "environments", "deliverables", "apps", "execution_log", "details", "metadata",
 ];
-const RETIRED = new Set(["sub_issues", "details"]);
+const RETIRED = new Set(["sub_issues", "details", "waiting", "duplicates"]);
 
 async function reloadPreferences() {
   const saved = localStorage.getItem(STORAGE_KEY)!;
@@ -39,9 +40,9 @@ describe("issue sidebar persisted preferences", () => {
     const state = useIssueSidebarSectionsStore.getState();
     const order = [...selectIssueSidebarOrder(state)];
     // Sections added after this save are placed after their default predecessor.
-    const added = new Set(["waiting", "changes"]);
+    const added = new Set(["relations", "changes"]);
     expect(order.filter((id) => !added.has(id))).toEqual(savedOrder.filter((id) => !RETIRED.has(id)));
-    expect(order.indexOf("waiting")).toBe(order.indexOf("parent") + 1);
+    expect(order.indexOf("relations")).toBe(order.indexOf("parent") + 1);
     expect(order.indexOf("changes")).toBe(order.indexOf("apps") + 1);
     expect(state.hidden).toEqual(["parent", "apps"]);
     await reloadPreferences();
@@ -51,12 +52,12 @@ describe("issue sidebar persisted preferences", () => {
 
   it("persists hiding and reordering, then restores defaults", async () => {
     const store = useIssueSidebarSectionsStore;
-    store.getState().setHidden("duplicates", true);
-    store.getState().setOrder(["duplicates", ...ISSUE_SIDEBAR_SECTIONS]);
+    store.getState().setHidden("deliverables", true);
+    store.getState().setOrder(["deliverables", ...ISSUE_SIDEBAR_SECTIONS]);
     await reloadPreferences();
-    expect(selectIssueSidebarOrder(store.getState())[0]).toBe("duplicates");
-    expect(store.getState().hidden).toEqual(["duplicates"]);
-    store.getState().setHidden("duplicates", false);
+    expect(selectIssueSidebarOrder(store.getState())[0]).toBe("deliverables");
+    expect(store.getState().hidden).toEqual(["deliverables"]);
+    store.getState().setHidden("deliverables", false);
     await reloadPreferences();
     expect(store.getState().hidden).toEqual([]);
     store.getState().reset();
