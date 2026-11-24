@@ -291,6 +291,12 @@ const desktopAPI = {
   /** Validate that a path is an existing readable+writable directory. */
   validateLocalDirectory: (path: string) =>
     ipcRenderer.invoke("local-directory:validate", path),
+  /** Uncommitted changes in a local folder, read with git on this machine. */
+  readLocalWorkingCopy: (path: string) =>
+    ipcRenderer.invoke("local-git:working-copy", path),
+  /** What an agent branch in a local folder's repo would merge into HEAD. */
+  readLocalAgentBranch: (path: string, branch: string) =>
+    ipcRenderer.invoke("local-git:agent-branch", path, branch),
   /** Read every theme in the themes folder, and start watching it. */
   readThemeFolder: (): Promise<ThemeFolderSnapshot> =>
     ipcRenderer.invoke(THEME_FOLDER_READ_CHANNEL),

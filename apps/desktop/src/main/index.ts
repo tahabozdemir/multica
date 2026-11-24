@@ -21,6 +21,7 @@ import {
   setupDaemonManager,
 } from "./daemon-manager";
 import { setupLocalDirectory } from "./local-directory";
+import { setupLocalGit } from "./local-git";
 import { setupThemeFolder } from "./theme-folder";
 import { setupVoiceInput } from "./voice";
 import { configureLinuxFileDialogs } from "./linux-file-dialog";
@@ -1113,6 +1114,7 @@ if (!gotTheLock) {
       () => mainWindows.all(),
     );
     setupLocalDirectory(() => mainWindows.mostRecent());
+    setupLocalGit();
     setupThemeFolder();
     setupVoiceInput();
 

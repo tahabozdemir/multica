@@ -4,6 +4,7 @@ import type { NavigationGesture } from "../shared/navigation-gestures";
 import type { ContextMenuCommand, ContextMenuRequest } from "../shared/context-menu";
 import type { RendererRouteContextInput } from "../shared/renderer-route-context";
 import type { FreezeBreadcrumb } from "../shared/freeze-breadcrumb";
+import type { LocalGitAgentBranchResult, LocalGitWorkingCopyResult } from "../shared/local-git";
 import type {
   DesktopWindowContext,
   IssueWindowRequest,
@@ -136,6 +137,10 @@ interface DesktopAPI {
      *  Drives the worktree execution-mode option in the resource UI. */
     is_git_repo?: boolean;
   }>;
+  /** Uncommitted changes in a local folder, read with git on this machine. */
+  readLocalWorkingCopy: (path: string) => Promise<LocalGitWorkingCopyResult>;
+  /** What an agent branch in a local folder's repo would merge into HEAD. */
+  readLocalAgentBranch: (path: string, branch: string) => Promise<LocalGitAgentBranchResult>;
   /** Read every theme in the themes folder in user data, and start watching it. */
   readThemeFolder: () => Promise<ThemeFolderSnapshot>;
   /** Called once a change in the themes folder settles. Returns an unsubscribe function. */
