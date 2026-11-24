@@ -307,5 +307,44 @@
     "toast_completed": "«{{name}}» está completado",
     "notice": "Este proyecto está archivado. No aparece en las listas ni en los selectores de proyectos y no acepta tareas nuevas; sus tareas se pueden seguir viendo y editando.",
     "prop_label": "Archivado"
+  },
+  "local_changes": {
+    "agent_branch_button": "Ver cambios de la rama",
+    "working_copy_button": "Ver cambios sin confirmar",
+    "agent_branch_title": "Cambios de la rama",
+    "working_copy_title": "Cambios sin confirmar",
+    "refresh": "Actualizar",
+    "loading": "Cargando cambios",
+    "files_count_one": "{{count}} archivo",
+    "files_count_other": "{{count}} archivos",
+    "empty_working_copy": "No hay cambios sin confirmar.",
+    "empty_branch": "Esta rama no cambia ningún archivo.",
+    "merged": "Esta rama ya está fusionada en la rama actual de la carpeta.",
+    "carried_over_note": "Incluye tu propio trabajo sin confirmar que se trasladó entre ejecuciones.",
+    "truncated": "Algunos cambios son demasiado grandes para mostrarse.",
+    "file_truncated": "El resto de este archivo es demasiado grande para mostrarse.",
+    "binary": "Binario",
+    "commits": "Commits",
+    "commit_origin": {
+      "baseline": "Punto de partida",
+      "carried_over": "Tu trabajo"
+    },
+    "status": {
+      "added": "Añadido",
+      "deleted": "Eliminado",
+      "modified": "Modificado",
+      "renamed": "Renombrado",
+      "copied": "Copiado",
+      "untracked": "Nuevo"
+    },
+    "error": {
+      "not_found": "Esta carpeta ya no existe en este equipo.",
+      "not_a_repo": "Esta carpeta no está en un repositorio git.",
+      "no_commits": "El repositorio aún no tiene commits.",
+      "branch_not_found": "Esta rama no está en el repositorio de la carpeta. Puede que se haya fusionado y eliminado.",
+      "git_unavailable": "No se encontró git en este equipo.",
+      "unsupported": "Disponible en la app de escritorio.",
+      "generic": "No se pudieron leer los cambios."
+    }
   }
 }

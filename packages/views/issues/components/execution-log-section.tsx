@@ -23,6 +23,7 @@ import { ActorAvatar } from "../../common/actor-avatar";
 import { AgentAvatarStack } from "../../agents/components/agent-avatar-stack";
 import { formatDuration } from "../../agents/components/agent-activity-hover-content";
 import { TranscriptButton } from "../../common/task-transcript";
+import { AgentBranchChangesButton } from "../../common/local-changes";
 import { cancellationActorLabel, cancelReasonLabel, failureReasonLabel } from "../../agents/components/tabs/task-failure";
 import { IssueSidebarCollapsible, IssueSidebarSectionHeader } from "./issue-sidebar-section";
 import { useT } from "../../i18n";
@@ -591,6 +592,7 @@ function PastRow({ task, issueId, showIssue = false }: { task: AgentTask; issueI
           </RowStatus>
           <RowActions>
             <TranscriptButton task={task} agentName="" title={t(($) => $.execution_log.transcript_tooltip)} />
+            <AgentBranchChangesButton task={task} issueId={task.issue_id || issueId} />
             {canRetryRun(task) && <RetryRunButton task={task} issueId={issueId} />}
           </RowActions>
         </div>

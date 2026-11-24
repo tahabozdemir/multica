@@ -298,5 +298,43 @@
     "toast_completed": "「{{name}}」を完了にしました",
     "notice": "このプロジェクトはアーカイブ済みです。一覧や選択肢に表示されず、新しいタスクは作成できません。既存のタスクは閲覧・編集できます。",
     "prop_label": "アーカイブ"
+  },
+  "local_changes": {
+    "agent_branch_button": "ブランチの変更を表示",
+    "working_copy_button": "未コミットの変更を表示",
+    "agent_branch_title": "ブランチの変更",
+    "working_copy_title": "未コミットの変更",
+    "refresh": "更新",
+    "loading": "変更を読み込み中",
+    "files_count_other": "{{count}} 個のファイル",
+    "empty_working_copy": "未コミットの変更はありません。",
+    "empty_branch": "このブランチはファイルを変更していません。",
+    "merged": "このブランチはフォルダーの現在のブランチにすでにマージされています。",
+    "carried_over_note": "実行の間に引き継がれた、あなた自身の未コミットの作業を含みます。",
+    "truncated": "一部の変更は大きすぎるため表示できません。",
+    "file_truncated": "このファイルの残りは大きすぎるため表示できません。",
+    "binary": "バイナリ",
+    "commits": "コミット",
+    "commit_origin": {
+      "baseline": "開始点",
+      "carried_over": "あなたの作業"
+    },
+    "status": {
+      "added": "追加",
+      "deleted": "削除",
+      "modified": "変更",
+      "renamed": "名前変更",
+      "copied": "コピー",
+      "untracked": "新規"
+    },
+    "error": {
+      "not_found": "このフォルダーはこのコンピューター上に存在しません。",
+      "not_a_repo": "このフォルダーは git リポジトリ内にありません。",
+      "no_commits": "リポジトリにはまだコミットがありません。",
+      "branch_not_found": "このブランチはフォルダーのリポジトリにありません。マージ後に削除された可能性があります。",
+      "git_unavailable": "このコンピューターで git が見つかりません。",
+      "unsupported": "デスクトップアプリで利用できます。",
+      "generic": "変更を読み込めませんでした。"
+    }
   }
 }

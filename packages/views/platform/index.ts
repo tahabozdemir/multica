@@ -17,6 +17,14 @@ export {
   type ValidateLocalDirectoryResult,
 } from "./local-directory";
 export {
+  canReadLocalGit,
+  readLocalAgentBranch,
+  readLocalWorkingCopy,
+  type LocalGitAgentBranchResult,
+  type LocalGitDiffFile,
+  type LocalGitWorkingCopyResult,
+} from "./local-git";
+export {
   themeFolderAPI,
   type ThemeFolderAPI,
   type ThemeFolderFile,

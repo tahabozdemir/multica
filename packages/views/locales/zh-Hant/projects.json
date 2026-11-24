@@ -298,5 +298,43 @@
     "toast_completed": "「{{name}}」已完成",
     "notice": "此專案已歸檔：不會出現在專案列表和選擇器中，也不能新增任務；既有任務仍可檢視和編輯。",
     "prop_label": "歸檔"
+  },
+  "local_changes": {
+    "agent_branch_button": "檢視分支變更",
+    "working_copy_button": "檢視未提交的變更",
+    "agent_branch_title": "分支變更",
+    "working_copy_title": "未提交的變更",
+    "refresh": "重新整理",
+    "loading": "正在載入變更",
+    "files_count_other": "{{count}} 個檔案",
+    "empty_working_copy": "沒有未提交的變更。",
+    "empty_branch": "此分支沒有修改任何檔案。",
+    "merged": "此分支已合併到資料夾的目前分支。",
+    "carried_over_note": "包含在多次執行之間延續下來、你自己未提交的工作。",
+    "truncated": "部分變更過大，無法顯示。",
+    "file_truncated": "此檔案的其餘部分過大，無法顯示。",
+    "binary": "二進位",
+    "commits": "提交",
+    "commit_origin": {
+      "baseline": "起點",
+      "carried_over": "你的工作"
+    },
+    "status": {
+      "added": "新增",
+      "deleted": "刪除",
+      "modified": "修改",
+      "renamed": "重新命名",
+      "copied": "複製",
+      "untracked": "新檔案"
+    },
+    "error": {
+      "not_found": "此資料夾在這台電腦上已不存在。",
+      "not_a_repo": "此資料夾不在 git 儲存庫中。",
+      "no_commits": "儲存庫還沒有任何提交。",
+      "branch_not_found": "資料夾的儲存庫中沒有此分支，可能已合併並刪除。",
+      "git_unavailable": "這台電腦上找不到 git。",
+      "unsupported": "可在桌面應用程式中使用。",
+      "generic": "無法讀取變更。"
+    }
   }
 }

@@ -66,6 +66,7 @@ import {
 } from "./local-directory-mode-options";
 import { GithubRefField, githubRefHasError } from "./github-ref-field";
 import { localDirectoryLabel } from "./local-directory-label";
+import { WorkingCopyChangesButton } from "../../common/local-changes";
 import { buildRuntimeMachines } from "../../runtimes/components/runtime-machines";
 import { useT } from "../../i18n";
 import { githubShortLabel } from "../../common/github-url";
@@ -857,6 +858,9 @@ function LocalFolderRow({
             <span className="font-mono text-micro">{resource.resource_ref.local_path}</span>
           </TooltipContent>
         </Tooltip>
+        {current && (
+          <WorkingCopyChangesButton path={resource.resource_ref.local_path} label={display} />
+        )}
         {!readOnly && <RemoveButton onRemove={remove} removing={removing} />}
       </div>
       <div className="pl-[1.375rem] pt-0.5">

@@ -307,5 +307,44 @@
     "toast_completed": "“{{name}}” is completed",
     "notice": "This project is archived. It's hidden from project lists and pickers and accepts no new issues; its issues stay readable and editable.",
     "prop_label": "Archived"
+  },
+  "local_changes": {
+    "agent_branch_button": "View branch changes",
+    "working_copy_button": "View uncommitted changes",
+    "agent_branch_title": "Branch changes",
+    "working_copy_title": "Uncommitted changes",
+    "refresh": "Refresh",
+    "loading": "Loading changes",
+    "files_count_one": "{{count}} file",
+    "files_count_other": "{{count}} files",
+    "empty_working_copy": "No uncommitted changes.",
+    "empty_branch": "This branch changes no files.",
+    "merged": "This branch is already merged into the folder's current branch.",
+    "carried_over_note": "Includes your own uncommitted work that was carried over between runs.",
+    "truncated": "Some changes are too large to show.",
+    "file_truncated": "The rest of this file is too large to show.",
+    "binary": "Binary",
+    "commits": "Commits",
+    "commit_origin": {
+      "baseline": "Starting point",
+      "carried_over": "Your work"
+    },
+    "status": {
+      "added": "Added",
+      "deleted": "Deleted",
+      "modified": "Modified",
+      "renamed": "Renamed",
+      "copied": "Copied",
+      "untracked": "New"
+    },
+    "error": {
+      "not_found": "This folder no longer exists on this computer.",
+      "not_a_repo": "This folder is not in a git repository.",
+      "no_commits": "The repository has no commits yet.",
+      "branch_not_found": "This branch is not in the folder's repository. It may have been merged and deleted.",
+      "git_unavailable": "Git was not found on this computer.",
+      "unsupported": "Available in the desktop app.",
+      "generic": "Couldn't read the changes."
+    }
   }
 }

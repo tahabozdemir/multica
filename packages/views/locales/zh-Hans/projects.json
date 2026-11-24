@@ -298,5 +298,43 @@
     "toast_completed": "\"{{name}}\"已完成",
     "notice": "该项目已归档：不会出现在项目列表和选择器中，也不能新建任务；已有任务仍可查看和编辑。",
     "prop_label": "归档于"
+  },
+  "local_changes": {
+    "agent_branch_button": "查看分支变更",
+    "working_copy_button": "查看未提交的变更",
+    "agent_branch_title": "分支变更",
+    "working_copy_title": "未提交的变更",
+    "refresh": "刷新",
+    "loading": "正在加载变更",
+    "files_count_other": "{{count}} 个文件",
+    "empty_working_copy": "没有未提交的变更。",
+    "empty_branch": "此分支没有修改任何文件。",
+    "merged": "此分支已合并到文件夹的当前分支。",
+    "carried_over_note": "包含在多次运行之间延续下来的、你自己未提交的工作。",
+    "truncated": "部分变更过大，无法显示。",
+    "file_truncated": "此文件的其余部分过大，无法显示。",
+    "binary": "二进制",
+    "commits": "提交",
+    "commit_origin": {
+      "baseline": "起点",
+      "carried_over": "你的工作"
+    },
+    "status": {
+      "added": "新增",
+      "deleted": "删除",
+      "modified": "修改",
+      "renamed": "重命名",
+      "copied": "复制",
+      "untracked": "新文件"
+    },
+    "error": {
+      "not_found": "此文件夹在这台电脑上已不存在。",
+      "not_a_repo": "此文件夹不在 git 仓库中。",
+      "no_commits": "仓库还没有任何提交。",
+      "branch_not_found": "文件夹的仓库中没有此分支，可能已合并并删除。",
+      "git_unavailable": "这台电脑上找不到 git。",
+      "unsupported": "可在桌面应用中使用。",
+      "generic": "无法读取变更。"
+    }
   }
 }

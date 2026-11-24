@@ -23,6 +23,7 @@ import { useCustomPricingStore } from "@multica/core/runtimes/custom-pricing-sto
 import { ActorAvatar } from "../../common/actor-avatar";
 import { DeferredTooltip } from "../../common/deferred-tooltip";
 import { TranscriptButton } from "../../common/task-transcript";
+import { AgentBranchChangesButton } from "../../common/local-changes";
 import { cancellationActorLabel, cancelReasonLabel, failureReasonLabel } from "../../agents/components/tabs/task-failure";
 import { Segmented } from "../../dashboard/components/dashboard-shared";
 import { formatDuration } from "../../dashboard/utils";
@@ -993,6 +994,7 @@ function RunListRow({ run, issueId, showIssue, costWidth }: { run: TimelineRun; 
             isLive={task.status === "running"}
             title={t(($) => $.execution_log.transcript_tooltip)}
           />
+          <AgentBranchChangesButton task={task} issueId={issueId} />
           {canRetryRun(task) && <RetryRunButton task={task} issueId={issueId} />}
         </span>
         <span className={cn(COL.toggle, "flex justify-end")}>

@@ -307,5 +307,44 @@
     "toast_completed": "« {{name}} » est terminé",
     "notice": "Ce projet est archivé. Il n'apparaît plus dans les listes ni les sélecteurs de projets et n'accepte plus de nouvelles tâches ; ses tâches restent consultables et modifiables.",
     "prop_label": "Archivé"
+  },
+  "local_changes": {
+    "agent_branch_button": "Voir les changements de la branche",
+    "working_copy_button": "Voir les changements non commités",
+    "agent_branch_title": "Changements de la branche",
+    "working_copy_title": "Changements non commités",
+    "refresh": "Actualiser",
+    "loading": "Chargement des changements",
+    "files_count_one": "{{count}} fichier",
+    "files_count_other": "{{count}} fichiers",
+    "empty_working_copy": "Aucun changement non commité.",
+    "empty_branch": "Cette branche ne modifie aucun fichier.",
+    "merged": "Cette branche est déjà fusionnée dans la branche actuelle du dossier.",
+    "carried_over_note": "Inclut votre propre travail non commité, reporté d'une exécution à l'autre.",
+    "truncated": "Certains changements sont trop volumineux pour être affichés.",
+    "file_truncated": "La suite de ce fichier est trop volumineuse pour être affichée.",
+    "binary": "Binaire",
+    "commits": "Commits",
+    "commit_origin": {
+      "baseline": "Point de départ",
+      "carried_over": "Votre travail"
+    },
+    "status": {
+      "added": "Ajouté",
+      "deleted": "Supprimé",
+      "modified": "Modifié",
+      "renamed": "Renommé",
+      "copied": "Copié",
+      "untracked": "Nouveau"
+    },
+    "error": {
+      "not_found": "Ce dossier n'existe plus sur cet ordinateur.",
+      "not_a_repo": "Ce dossier n'est pas dans un dépôt git.",
+      "no_commits": "Le dépôt n'a encore aucun commit.",
+      "branch_not_found": "Cette branche n'est pas dans le dépôt du dossier. Elle a peut-être été fusionnée puis supprimée.",
+      "git_unavailable": "Git est introuvable sur cet ordinateur.",
+      "unsupported": "Disponible dans l'application de bureau.",
+      "generic": "Impossible de lire les changements."
+    }
   }
 }
