@@ -318,6 +318,7 @@
     "card_labels": "라벨",
     "card_child_progress": "하위 태스크 진행률",
     "card_pull_requests": "Pull requests",
+    "card_local_changes": "로컬 변경 사항",
     "show_sub_issues": "하위 태스크 표시",
     "layout_options": "{{layout}} 옵션"
   },
@@ -2087,6 +2088,7 @@
     "merged": "병합됨",
     "view": "보기",
     "review": "검토",
-    "files_count_other": "파일 {{count}}개"
+    "files_count_other": "파일 {{count}}개",
+    "badge_label": "아직 병합되지 않은 에이전트 변경 사항"
   }
 }

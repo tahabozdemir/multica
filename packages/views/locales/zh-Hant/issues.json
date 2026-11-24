@@ -318,6 +318,7 @@
     "card_labels": "標籤",
     "card_child_progress": "子任務進度",
     "card_pull_requests": "Pull Request",
+    "card_local_changes": "本機變更",
     "show_sub_issues": "顯示子任務",
     "layout_options": "{{layout}}選項"
   },
@@ -2087,6 +2088,7 @@
     "merged": "已合併",
     "view": "檢視",
     "review": "審查",
-    "files_count_other": "{{count}} 個檔案"
+    "files_count_other": "{{count}} 個檔案",
+    "badge_label": "尚未合併的代理變更"
   }
 }

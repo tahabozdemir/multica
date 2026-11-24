@@ -318,6 +318,7 @@
     "card_labels": "标签",
     "card_child_progress": "子任务进度",
     "card_pull_requests": "Pull Request",
+    "card_local_changes": "本地变更",
     "show_sub_issues": "显示子任务",
     "layout_options": "{{layout}}选项"
   },
@@ -2087,6 +2088,7 @@
     "merged": "已合并",
     "view": "查看",
     "review": "审查",
-    "files_count_other": "{{count}} 个文件"
+    "files_count_other": "{{count}} 个文件",
+    "badge_label": "尚未合并的智能体变更"
   }
 }

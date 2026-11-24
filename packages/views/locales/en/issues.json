@@ -325,6 +325,7 @@
     "card_labels": "Labels",
     "card_child_progress": "Sub-issue progress",
     "card_pull_requests": "Pull requests",
+    "card_local_changes": "Local changes",
     "show_sub_issues": "Show sub-issues",
     "layout_options": "{{layout}} options"
   },
@@ -2182,6 +2183,7 @@
     "view": "View",
     "review": "Review",
     "files_count_one": "{{count}} file",
-    "files_count_other": "{{count}} files"
+    "files_count_other": "{{count}} files",
+    "badge_label": "Agent changes not yet merged"
   }
 }

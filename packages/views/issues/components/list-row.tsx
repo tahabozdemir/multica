@@ -35,6 +35,8 @@ import {
   useIssuePeekLinkProps,
 } from "../surface/peek-context";
 import { useLocale } from "../../i18n";
+import { canListLocalAgentBranches } from "../../platform/local-git";
+import { IssueLocalChangesBadge } from "../../common/local-changes/issue-changes-badge";
 
 export interface ChildProgress {
   done: number;
@@ -97,6 +99,7 @@ function ListRowContent({
   const showLabels = storeProperties.labels && labels.length > 0;
   const pullRequests = useIssuePullRequestSummaries(issue.id, storeProperties.pullRequests);
   const showPullRequests = storeProperties.pullRequests && pullRequests.length > 0;
+  const showLocalChanges = storeProperties.localChanges && canListLocalAgentBranches();
 
   return (
     <IssueActionsContextMenu issue={issue}>
@@ -178,6 +181,7 @@ function ListRowContent({
                 className="max-w-[40%]"
               />
             )}
+            {showLocalChanges && <IssueLocalChangesBadge issue={issue} />}
             {showLabels && (
               <span className="ml-1.5 hidden md:inline-flex shrink-0 items-center gap-1 max-w-[260px] overflow-hidden">
                 {labels.slice(0, 3).map((label) => (

@@ -325,6 +325,7 @@
     "card_labels": "Étiquettes",
     "card_child_progress": "Avancement des sous-tâches",
     "card_pull_requests": "Pull requests",
+    "card_local_changes": "Changements locaux",
     "show_sub_issues": "Afficher les sous-tâches",
     "layout_options": "Options de la vue {{layout}}"
   },
@@ -2182,6 +2183,7 @@
     "view": "Voir",
     "review": "Relire",
     "files_count_one": "{{count}} fichier",
-    "files_count_other": "{{count}} fichiers"
+    "files_count_other": "{{count}} fichiers",
+    "badge_label": "Changements de l'agent pas encore fusionnés"
   }
 }

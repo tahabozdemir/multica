@@ -37,6 +37,8 @@ import { IssueBlockedMarker } from "./issue-blockers";
 import { IssueDuplicateOfMarker } from "./issue-duplicates";
 import { IssuePullRequestChips, useIssuePullRequestSummaries } from "./pull-request-chips";
 import { useIssueSurfaceActionsOptional } from "../surface/actions-context";
+import { canListLocalAgentBranches } from "../../platform/local-git";
+import { IssueLocalChangesBadge } from "../../common/local-changes/issue-changes-badge";
 import {
   PEEK_TARGET_ATTR,
   useIsIssuePeeked,
@@ -118,6 +120,7 @@ export const BoardCardContent = memo(function BoardCardContent({
   const showLabels = storeProperties.labels && labels.length > 0;
   const pullRequests = useIssuePullRequestSummaries(issue.id, storeProperties.pullRequests);
   const showPullRequests = storeProperties.pullRequests && pullRequests.length > 0;
+  const showLocalChanges = storeProperties.localChanges && canListLocalAgentBranches();
   // Keeps the chip row from rendering an empty flex container when the status
   // chip is the only thing in it and it decides to render nothing.
   const showCustomStatus = useIsCustomStatus(issue.status);
@@ -237,8 +240,9 @@ export const BoardCardContent = memo(function BoardCardContent({
       {/* Chip row: status + project + labels + PRs + custom property values.
           The status chip renders only for a CUSTOM status — the column header
           already names the category. (MUL-6243) */}
-      {(showCustomStatus || showProject || showLabels || showPullRequests || cardCustomProperties.length > 0) && (
-        <div className="mt-1.5 flex items-center gap-1.5 flex-wrap">
+      {(showCustomStatus || showProject || showLabels || showPullRequests || showLocalChanges || cardCustomProperties.length > 0) && (
+        // `empty:hidden`: the local changes badge renders nothing for issues without agent work.
+        <div className="mt-1.5 flex items-center gap-1.5 flex-wrap empty:hidden">
           <CustomStatusChip status={issue.status} />
           {showProject && (
             <span className="inline-flex items-center gap-1 rounded-full bg-muted/60 px-1.5 py-0.5 text-micro text-muted-foreground max-w-[160px]">
@@ -257,6 +261,7 @@ export const BoardCardContent = memo(function BoardCardContent({
           {showPullRequests && (
             <IssuePullRequestChips pullRequests={pullRequests} max={2} insideLink />
           )}
+          {showLocalChanges && <IssueLocalChangesBadge issue={issue} />}
           {cardCustomProperties.map((property) => (
             <span
               key={property.id}

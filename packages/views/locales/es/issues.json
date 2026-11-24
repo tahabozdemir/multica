@@ -312,6 +312,7 @@
     "card_labels": "Etiquetas",
     "card_child_progress": "Progreso de subtareas",
     "card_pull_requests": "Pull requests",
+    "card_local_changes": "Cambios locales",
     "show_sub_issues": "Mostrar subtareas",
     "columns_section": "Columnas",
     "columns_locked_by_filter": "Quita el filtro de estado para mostrar u ocultar columnas.",
@@ -2182,6 +2183,7 @@
     "view": "Ver",
     "review": "Revisar",
     "files_count_one": "{{count}} archivo",
-    "files_count_other": "{{count}} archivos"
+    "files_count_other": "{{count}} archivos",
+    "badge_label": "Cambios del agente aún sin fusionar"
   }
 }

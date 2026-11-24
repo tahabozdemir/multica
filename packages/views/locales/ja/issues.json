@@ -318,6 +318,7 @@
     "card_labels": "ラベル",
     "card_child_progress": "サブタスクの進捗",
     "card_pull_requests": "Pull requests",
+    "card_local_changes": "ローカルの変更",
     "show_sub_issues": "サブタスクを表示",
     "layout_options": "{{layout}}のオプション"
   },
@@ -2087,6 +2088,7 @@
     "merged": "マージ済み",
     "view": "表示",
     "review": "レビュー",
-    "files_count_other": "{{count}} 個のファイル"
+    "files_count_other": "{{count}} 個のファイル",
+    "badge_label": "まだマージされていないエージェントの変更"
   }
 }

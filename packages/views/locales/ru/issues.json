@@ -338,6 +338,7 @@
     "card_labels": "Метки",
     "card_child_progress": "Прогресс подзадач",
     "card_pull_requests": "Pull request'ы",
+    "card_local_changes": "Локальные изменения",
     "show_sub_issues": "Показывать подзадачи",
     "layout_options": "Настройки вида «{{layout}}»"
   },
@@ -2378,6 +2379,7 @@
     "files_count_one": "{{count}} файл",
     "files_count_few": "{{count}} файла",
     "files_count_many": "{{count}} файлов",
-    "files_count_other": "{{count}} файла"
+    "files_count_other": "{{count}} файла",
+    "badge_label": "Изменения агента, ещё не слитые"
   }
 }

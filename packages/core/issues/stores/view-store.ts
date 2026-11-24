@@ -137,6 +137,8 @@ export interface CardProperties {
   childProgress: boolean;
   labels: boolean;
   pullRequests: boolean;
+  /** Agent changes read from this machine's project folder (desktop only). */
+  localChanges: boolean;
 }
 
 export interface ActorFilterValue {
@@ -249,6 +251,7 @@ export const CARD_PROPERTY_OPTIONS: { key: keyof CardProperties; label: string }
   { key: "labels", label: "Labels" },
   { key: "childProgress", label: "Sub-issue progress" },
   { key: "pullRequests", label: "Pull requests" },
+  { key: "localChanges", label: "Local changes" },
 ];
 
 export const DEFAULT_CARD_PROPERTIES: Readonly<CardProperties> = {
@@ -261,6 +264,7 @@ export const DEFAULT_CARD_PROPERTIES: Readonly<CardProperties> = {
   childProgress: true,
   labels: false,
   pullRequests: false,
+  localChanges: false,
 };
 
 export const DEFAULT_HIDDEN_STATUSES: readonly IssueStatus[] = [

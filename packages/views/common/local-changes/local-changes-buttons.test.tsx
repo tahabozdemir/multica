@@ -12,7 +12,7 @@ import { AgentBranchChangesButton, WorkingCopyChangesButton } from "./local-chan
 
 vi.mock("@multica/core/hooks", () => ({ useWorkspaceId: () => "ws" }));
 vi.mock("../../platform/use-local-daemon-status", () => ({
-  useLocalDaemonStatus: () => ({ daemonId: "this-mac", deviceName: null, running: true }),
+  readLocalDaemonStatus: async () => ({ daemonId: "this-mac", deviceName: null, running: true }),
 }));
 vi.mock("../../platform/local-git", () => ({
   canReadLocalGit: vi.fn(() => true),

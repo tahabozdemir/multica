@@ -53,6 +53,13 @@ function toStatus(s: DaemonStatusLike | undefined): LocalDaemonStatus {
  * The initial paint reads `getStatus()` once so the UI doesn't flash a
  * "no daemon" state while waiting for the first push from `onStatusChange`.
  */
+/** One read of the local daemon's status; `daemonId: null` outside the desktop app. */
+export async function readLocalDaemonStatus(): Promise<LocalDaemonStatus> {
+  const api = readDaemonAPI();
+  if (!api?.getStatus) return toStatus(undefined);
+  return toStatus(await api.getStatus());
+}
+
 export function useLocalDaemonStatus(): LocalDaemonStatus {
   const [status, setStatus] = useState<LocalDaemonStatus>(() => ({
     daemonId: null,

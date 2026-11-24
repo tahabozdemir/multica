@@ -139,6 +139,7 @@ import { TableColumnPicker } from "./table-view";
 import { DisplayChip, SortDirectionButton } from "./display-parts";
 import { AdvancedFilterPanel, stopMenuSearchKeys } from "./advanced-filter-panel";
 import { PropertyFilterOptions } from "./property-filter-options";
+import { canListLocalAgentBranches } from "../../platform/local-git";
 import {
   DUE_DATE_LABEL_KEY,
   FILTER_FIELD_ICONS,
@@ -2012,7 +2013,7 @@ export function IssueDisplayControls({
     project: "group_project",
     assignee: "group_assignee",
   };
-  const CARD_PROPERTY_LABEL_KEY: Record<typeof CARD_PROPERTY_OPTIONS[number]["key"], "card_priority" | "card_description" | "card_assignee" | "card_start_date" | "card_due_date" | "card_project" | "card_labels" | "card_child_progress" | "card_pull_requests"> = {
+  const CARD_PROPERTY_LABEL_KEY: Record<typeof CARD_PROPERTY_OPTIONS[number]["key"], "card_priority" | "card_description" | "card_assignee" | "card_start_date" | "card_due_date" | "card_project" | "card_labels" | "card_child_progress" | "card_pull_requests" | "card_local_changes"> = {
     priority: "card_priority",
     description: "card_description",
     assignee: "card_assignee",
@@ -2022,8 +2023,12 @@ export function IssueDisplayControls({
     labels: "card_labels",
     childProgress: "card_child_progress",
     pullRequests: "card_pull_requests",
+    localChanges: "card_local_changes",
   };
-  const availableCardPropertyOptions = cardPropertyOptionsForView(viewMode);
+  // Local changes are read with git on this machine: desktop only.
+  const availableCardPropertyOptions = cardPropertyOptionsForView(viewMode).filter(
+    (option) => option.key !== "localChanges" || canListLocalAgentBranches(),
+  );
   const availableSortOptions = sortOptionsForView(viewMode, grouping);
   const sortPropertyId = propertyIdFromViewKey(sortBy);
   const groupingPropertyId = propertyIdFromViewKey(grouping);

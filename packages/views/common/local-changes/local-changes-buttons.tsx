@@ -10,7 +10,7 @@ import { issueDetailOptions } from "@multica/core/issues/queries";
 import { projectResourcesOptions } from "@multica/core/projects";
 import type { AgentTask, LocalDirectoryResourceRef, ProjectResource } from "@multica/core/types";
 import { canReadLocalGit } from "../../platform/local-git";
-import { useLocalDaemonStatus } from "../../platform/use-local-daemon-status";
+import { readLocalDaemonStatus } from "../../platform/use-local-daemon-status";
 import { localDirectoryLabel } from "../../projects/components/local-directory-label";
 import { useT } from "../../i18n";
 import {
@@ -27,8 +27,14 @@ type LocalFolder = { path: string; label: string };
  */
 export function useLocalProjectFolder(projectId: string | null | undefined): LocalFolder | null {
   const wsId = useWorkspaceId();
-  const { daemonId } = useLocalDaemonStatus();
   const supported = canReadLocalGit();
+  // One shared read for every card and section, not a status subscription each.
+  const { data: daemonId = null } = useQuery({
+    queryKey: ["local-daemon", "id"],
+    queryFn: async () => (await readLocalDaemonStatus()).daemonId,
+    enabled: supported,
+    staleTime: 30_000,
+  });
   const { data: resources } = useQuery({
     ...projectResourcesOptions(wsId, projectId ?? ""),
     enabled: supported && Boolean(projectId) && Boolean(daemonId),
