@@ -17,6 +17,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/multica-ai/multica/server/internal/cli"
+	"github.com/multica-ai/multica/server/internal/privacy"
 )
 
 var setupCmd = &cobra.Command{
@@ -36,7 +37,7 @@ browser can reach this CLI directly on a private network address, pass
 
 Use --profile to create an isolated configuration for a separate environment:
   multica setup self-host --profile staging --server-url https://api-staging.co`,
-	RunE: runSetupCloud,
+	RunE: runSetupDefault,
 }
 
 var setupCloudCmd = &cobra.Command{
@@ -139,6 +140,15 @@ func formatURLChange(oldVal, newVal string) string {
 		return fmt.Sprintf("%s  ->  %s", oldVal, newVal)
 	}
 	return oldVal
+}
+
+// runSetupDefault is bare `multica setup`. Upstream that means Multica Cloud;
+// in privacy mode the user has to name the target.
+func runSetupDefault(cmd *cobra.Command, args []string) error {
+	if privacy.Enabled() {
+		return fmt.Errorf("privacy mode: `multica setup` does not default to Multica Cloud; run `multica setup self-host` for your own server, or `multica setup cloud` to connect to Multica Cloud")
+	}
+	return runSetupCloud(cmd, args)
 }
 
 func runSetupCloud(cmd *cobra.Command, args []string) error {

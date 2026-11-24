@@ -10,6 +10,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -22,6 +23,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/multica-ai/multica/server/internal/privacy"
 	"github.com/multica-ai/multica/server/internal/selfexec"
 )
 
@@ -40,6 +42,22 @@ const releaseAPIBaseURLEnv = "MULTICA_RELEASE_API_BASE_URL"
 const releaseDownloadBaseURLEnv = "MULTICA_RELEASE_DOWNLOAD_BASE_URL"
 
 const DefaultUpdateDownloadTimeout = 120 * time.Second
+
+// ErrSelfUpdatePrivacyMode is returned by every self-update path while
+// privacy mode is on and no release mirror is configured: the default source
+// is GitHub, and an upstream binary would replace a build of this fork.
+var ErrSelfUpdatePrivacyMode = errors.New("self-update is disabled in privacy mode (MULTICA_PRIVACY_MODE); rebuild the CLI from your checkout, or set MULTICA_RELEASE_API_BASE_URL and MULTICA_RELEASE_DOWNLOAD_BASE_URL to your own release mirror")
+
+// selfUpdateAllowed reports whether a release lookup or download may run.
+func selfUpdateAllowed() error {
+	if !privacy.Enabled() {
+		return nil
+	}
+	if releaseAPIBaseURL() != defaultReleaseAPIBaseURL && releaseDownloadBaseURL() != "" {
+		return nil
+	}
+	return ErrSelfUpdatePrivacyMode
+}
 
 func releaseAPIBaseURL() string {
 	if value := strings.TrimRight(strings.TrimSpace(os.Getenv(releaseAPIBaseURLEnv)), "/"); value != "" {
@@ -253,6 +271,9 @@ func verifyAssetSHA256(data []byte, expectedHex, assetName string) error {
 }
 
 func fetchReleaseByTag(tag string) (*GitHubRelease, error) {
+	if err := selfUpdateAllowed(); err != nil {
+		return nil, err
+	}
 	client := &http.Client{Timeout: 10 * time.Second}
 	req, err := http.NewRequest(http.MethodGet, releaseAPIBaseURL()+"/repos/multica-ai/multica/releases/tags/"+url.PathEscape(tag), nil)
 	if err != nil {
@@ -279,6 +300,9 @@ func fetchReleaseByTag(tag string) (*GitHubRelease, error) {
 
 // FetchLatestRelease fetches the latest release tag from the multica GitHub repo.
 func FetchLatestRelease() (*GitHubRelease, error) {
+	if err := selfUpdateAllowed(); err != nil {
+		return nil, err
+	}
 	client := &http.Client{Timeout: 10 * time.Second}
 	req, err := http.NewRequest(http.MethodGet, releaseAPIBaseURL()+"/repos/multica-ai/multica/releases/latest", nil)
 	if err != nil {
@@ -349,6 +373,10 @@ func GetBrewPrefix() string {
 // UpdateViaBrew runs `brew upgrade multica-ai/tap/multica`.
 // Returns the combined output and any error.
 func UpdateViaBrew() (string, error) {
+	// The tap lives on GitHub, so a mirror does not help here.
+	if privacy.Enabled() {
+		return "", ErrSelfUpdatePrivacyMode
+	}
 	cmd := exec.Command("brew", "upgrade", "multica-ai/tap/multica")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
@@ -389,6 +417,9 @@ func UpdateViaDownload(targetVersion string) (string, error) {
 
 // UpdateViaDownloadWithTimeout downloads the latest release binary with a caller-selected timeout.
 func UpdateViaDownloadWithTimeout(targetVersion string, downloadTimeout time.Duration) (string, error) {
+	if err := selfUpdateAllowed(); err != nil {
+		return "", err
+	}
 	// Determine current binary path.
 	exePath, err := selfexec.Resolve()
 	if err != nil {

@@ -16,6 +16,7 @@ import (
 	"github.com/multica-ai/multica/server/internal/cli"
 	"github.com/multica-ai/multica/server/internal/daemon"
 	"github.com/multica-ai/multica/server/internal/daemon/execenv"
+	"github.com/multica-ai/multica/server/internal/privacy"
 )
 
 var agentCmd = &cobra.Command{
@@ -358,6 +359,11 @@ func resolveHumanServerURL(cmd *cobra.Command) string {
 func resolveLoginTokenServerURL(cmd *cobra.Command) string {
 	if val := tryResolveHumanServerURL(cmd); val != "" {
 		return val
+	}
+	// Privacy mode: never send a token to Multica Cloud on a guess.
+	if privacy.Enabled() {
+		fmt.Fprintln(os.Stderr, "No server configured. Pass --server-url, or run 'multica setup self-host' first.")
+		os.Exit(1)
 	}
 	return defaultCloudServerURL
 }

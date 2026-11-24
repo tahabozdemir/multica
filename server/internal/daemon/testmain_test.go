@@ -17,6 +17,9 @@ import (
 // LOCALAPPDATA on Windows. Process-wide redirection isolates tests that forget
 // their own redirect; per-test t.Setenv overrides still take precedence.
 func TestMain(m *testing.M) {
+	// Upstream tests cover upstream behavior; this fork's privacy tests turn
+	// MULTICA_PRIVACY_MODE back on with t.Setenv.
+	os.Setenv("MULTICA_PRIVACY_MODE", "0")
 	if testutil.RunPiCleanupFixture() {
 		os.Exit(0)
 	}

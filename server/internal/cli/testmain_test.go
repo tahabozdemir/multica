@@ -19,6 +19,9 @@ import (
 // isolates tests that forget their own redirect on every platform; per-test
 // t.Setenv overrides still take precedence.
 func TestMain(m *testing.M) {
+	// Upstream tests cover upstream behavior; this fork's privacy tests turn
+	// MULTICA_PRIVACY_MODE back on with t.Setenv.
+	os.Setenv("MULTICA_PRIVACY_MODE", "0")
 	for _, key := range []string{
 		"MULTICA_AGENT_ID",
 		"MULTICA_TASK_ID",
