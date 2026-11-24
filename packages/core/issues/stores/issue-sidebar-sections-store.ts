@@ -17,6 +17,7 @@ export const ISSUE_SIDEBAR_SECTIONS = [
   "environments",
   "deliverables",
   "apps",
+  "changes",
   "execution_log",
   "metadata",
 ] as const;

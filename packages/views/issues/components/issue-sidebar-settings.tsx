@@ -61,6 +61,7 @@ export function useIssueSidebarSectionLabels(): Record<IssueSidebarSection, stri
     environments: t(($) => $.environments.section_title),
     deliverables: t(($) => $.deliverables.section_title),
     apps: t(($) => $.app_calls.section_title),
+    changes: t(($) => $.changes.section),
     execution_log: t(($) => $.execution_log.section),
     metadata: t(($) => $.detail.section_metadata),
   };

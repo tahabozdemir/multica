@@ -126,6 +126,8 @@ import { collectThreadParticipants, collectThreadReplies, deriveThreadResolution
 import { IssueAgentHeaderChip } from "./issue-agent-header-chip";
 import { IssuePresenceHeaderChip } from "./issue-presence-header-chip";
 import { ExecutionLogSection } from "./execution-log-section";
+import { IssueChangesSection } from "./issue-changes-section";
+import { canListLocalAgentBranches } from "../../platform/local-git";
 import { WakeupsSection } from "./wakeups-section";
 import { QuickActionsSection } from "./quick-actions-section";
 import { PluginPanelSection } from "../../plugins";
@@ -3607,6 +3609,8 @@ export function IssueDetail({ issueId, onDelete, inbox, defaultSidebarOpen = tru
     ),
     // Apps the issue's runs used. Hidden until one makes a call.
     apps: <IssueAppsSection issueId={id} />,
+    // The issue's agent branches in this machine's project folder. Desktop only.
+    changes: <IssueChangesSection issue={issue} />,
     // Execution summary owns its query, realtime updates and disclosure.
     execution_log: <ExecutionLogSection key={id} issueId={id} identifier={issue.identifier} issueTitle={issue.title} hasChildren={childIssues.length > 0} />,
     metadata: <MetadataSection metadata={issue.metadata ?? {}} />,
@@ -3621,7 +3625,9 @@ export function IssueDetail({ issueId, onDelete, inbox, defaultSidebarOpen = tru
         (section) =>
           guest
             ? GUEST_SIDEBAR_SECTIONS.has(section)
-            : (section !== "pull_requests" || githubSettings.prSidebar) && (section !== "plugins" || pluginsEnabled),
+            : (section !== "pull_requests" || githubSettings.prSidebar) &&
+              (section !== "plugins" || pluginsEnabled) &&
+              (section !== "changes" || canListLocalAgentBranches()),
       )}
       addRow={<IssueSidebarAddRow items={sidebarAddables.filter((item) => item !== sidebarReveal)} onPick={setSidebarReveal} />}
       footer={guest ? undefined : <IssueSidebarFooter issue={issue} />}

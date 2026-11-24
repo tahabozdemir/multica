@@ -2174,5 +2174,14 @@
     "marker_notify": "{{name}} sera notifié une fois celles-ci terminées.",
     "marker_unavailable": "{{name}} ne peut pas s'exécuter pour l'instant : rien ne démarrera une fois celles-ci terminées.",
     "marker_unassigned": "Aucun responsable : rien ne démarrera une fois celles-ci terminées."
+  },
+  "changes": {
+    "section": "Changements",
+    "live": "En direct",
+    "merged": "Fusionnée",
+    "view": "Voir",
+    "review": "Relire",
+    "files_count_one": "{{count}} fichier",
+    "files_count_other": "{{count}} fichiers"
   }
 }

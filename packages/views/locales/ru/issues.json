@@ -2368,5 +2368,16 @@
     "marker_notify": "{{name}} получит уведомление после их завершения.",
     "marker_unavailable": "{{name}} сейчас не может работать, поэтому после их завершения ничего не начнётся.",
     "marker_unassigned": "Исполнитель не назначен, поэтому после их завершения ничего не начнётся."
+  },
+  "changes": {
+    "section": "Изменения",
+    "live": "В реальном времени",
+    "merged": "Слита",
+    "view": "Открыть",
+    "review": "Проверить",
+    "files_count_one": "{{count}} файл",
+    "files_count_few": "{{count}} файла",
+    "files_count_many": "{{count}} файлов",
+    "files_count_other": "{{count}} файла"
   }
 }

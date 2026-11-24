@@ -2080,5 +2080,13 @@
     "marker_notify": "阻塞结束后通知 {{name}}。",
     "marker_unavailable": "{{name}} 当前无法运行，阻塞结束后不会自动开始。",
     "marker_unassigned": "未指派负责人，阻塞结束后不会自动开始。"
+  },
+  "changes": {
+    "section": "变更",
+    "live": "实时",
+    "merged": "已合并",
+    "view": "查看",
+    "review": "审查",
+    "files_count_other": "{{count}} 个文件"
   }
 }

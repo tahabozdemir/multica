@@ -2080,5 +2080,13 @@
     "marker_notify": "すべて終了すると {{name}} に通知されます。",
     "marker_unavailable": "{{name}} は現在実行できないため、すべて終了しても自動では開始しません。",
     "marker_unassigned": "担当者がいないため、すべて終了しても自動では開始しません。"
+  },
+  "changes": {
+    "section": "変更",
+    "live": "ライブ",
+    "merged": "マージ済み",
+    "view": "表示",
+    "review": "レビュー",
+    "files_count_other": "{{count}} 個のファイル"
   }
 }

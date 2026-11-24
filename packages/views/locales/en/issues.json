@@ -2174,5 +2174,14 @@
     "marker_notify": "{{name}} is notified once these end.",
     "marker_unavailable": "{{name}} can't run right now, so nothing starts when these end.",
     "marker_unassigned": "No assignee, so nothing starts when these end."
+  },
+  "changes": {
+    "section": "Changes",
+    "live": "Live",
+    "merged": "Merged",
+    "view": "View",
+    "review": "Review",
+    "files_count_one": "{{count}} file",
+    "files_count_other": "{{count}} files"
   }
 }

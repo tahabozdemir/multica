@@ -38,8 +38,11 @@ describe("issue sidebar persisted preferences", () => {
     await useIssueSidebarSectionsStore.persist.rehydrate();
     const state = useIssueSidebarSectionsStore.getState();
     const order = [...selectIssueSidebarOrder(state)];
-    expect(order.filter((id) => id !== "waiting")).toEqual(savedOrder.filter((id) => !RETIRED.has(id)));
+    // Sections added after this save are placed after their default predecessor.
+    const added = new Set(["waiting", "changes"]);
+    expect(order.filter((id) => !added.has(id))).toEqual(savedOrder.filter((id) => !RETIRED.has(id)));
     expect(order.indexOf("waiting")).toBe(order.indexOf("parent") + 1);
+    expect(order.indexOf("changes")).toBe(order.indexOf("apps") + 1);
     expect(state.hidden).toEqual(["parent", "apps"]);
     await reloadPreferences();
     expect(selectIssueSidebarOrder(useIssueSidebarSectionsStore.getState())).toEqual(order);
