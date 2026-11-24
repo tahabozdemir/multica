@@ -9,6 +9,7 @@ export function privacyModeFrom(value: string | undefined): boolean {
   return !(normalized === "0" || normalized === "false" || normalized === "off" || normalized === "no");
 }
 
+// import.meta.env is absent when electron.vite.config.ts imports this module.
 export const PRIVACY_MODE: boolean = privacyModeFrom(
-  (import.meta.env as unknown as Record<string, string | undefined>).VITE_MULTICA_PRIVACY_MODE,
+  (import.meta.env as unknown as Record<string, string | undefined> | undefined)?.VITE_MULTICA_PRIVACY_MODE,
 );
