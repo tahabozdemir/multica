@@ -23,6 +23,10 @@ import { deriveVersion } from "./package.mjs";
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(here, "..", "..", "..");
 const serverDir = join(repoRoot, "server");
+// This fork's desktop privacy switch (src/shared/privacy.ts): on unless 0/false/off/no.
+const privacyBuild = !["0", "false", "off", "no"].includes(
+  (process.env.VITE_MULTICA_PRIVACY_MODE ?? "").trim().toLowerCase(),
+);
 
 const PLATFORM_TO_GOOS = {
   darwin: "darwin",
@@ -137,15 +141,19 @@ if (hasGo()) {
 } else {
   console.warn(
     "[bundle-cli] `go` not found in PATH — skipping CLI build. " +
-      "Desktop will use whatever is already in resources/bin/, or fall back " +
-      "to auto-installing the latest release at runtime.",
+      (privacyBuild
+        ? "This privacy build only runs a bundled CLI, so agents will not run until one is bundled."
+        : "Desktop will use whatever is already in resources/bin/, or fall back " +
+          "to auto-installing the latest release at runtime."),
   );
 }
 
 if (!(await exists(srcBinary))) {
   console.warn(
-    `[bundle-cli] ${srcBinary} not present — Desktop will fall back to ` +
-      `auto-installing the latest release at runtime.`,
+    `[bundle-cli] ${srcBinary} not present — ` +
+      (privacyBuild
+        ? "this privacy build will not run agents until a CLI is bundled."
+        : "Desktop will fall back to auto-installing the latest release at runtime."),
   );
   await rm(destDir, { recursive: true, force: true });
   process.exit(0);

@@ -9,6 +9,7 @@ import { tmpdir } from "os";
 import { Readable } from "stream";
 
 import { selectPlatformReleaseAssetName } from "./cli-release-asset";
+import { PRIVACY_MODE } from "../shared/privacy";
 
 // Desktop prefers the bundled `multica` CLI shipped inside the app for
 // same-repo builds, but it can also repair or bootstrap a managed copy in
@@ -91,6 +92,9 @@ async function extractArchive(archive: string, dest: string): Promise<void> {
 }
 
 async function installFresh(): Promise<string> {
+  if (PRIVACY_MODE) {
+    throw new Error("privacy build: downloading the CLI from GitHub Releases is disabled");
+  }
   const target = managedCliPath();
   const checksums = await fetchChecksums();
   const assetName = selectPlatformReleaseAssetName(checksums.keys());

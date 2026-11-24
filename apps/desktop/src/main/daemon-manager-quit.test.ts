@@ -14,6 +14,8 @@ const context = vi.hoisted(() => ({
   finishStart: null as null | (() => void),
   finishStop: null as null | ((error?: Error) => void),
 }));
+// Upstream behavior; privacy builds are covered in daemon-manager-privacy.test.ts.
+vi.mock("../shared/privacy", () => ({ PRIVACY_MODE: false }));
 vi.mock("electron", () => ({
   app: {
     getAppPath: () => "/test/desktop", getPreferredSystemLanguages: () => [context.locale],

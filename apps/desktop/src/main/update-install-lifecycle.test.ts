@@ -26,6 +26,8 @@ const ctx = vi.hoisted(() => ({
   install: vi.fn(),
 }));
 
+// Upstream behavior; privacy builds are covered in daemon-manager-privacy.test.ts.
+vi.mock("../shared/privacy", () => ({ PRIVACY_MODE: false }));
 vi.mock("electron", () => ({
   app: {
     on: (name: string, listener: Handler) => {

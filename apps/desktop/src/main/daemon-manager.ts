@@ -23,6 +23,7 @@ import type {
 } from "../shared/daemon-types";
 import { daemonStatusAlive } from "../shared/daemon-types";
 import { ensureManagedCli, managedCliPath } from "./cli-bootstrap";
+import { PRIVACY_MODE } from "../shared/privacy";
 import { decideVersionAction } from "./version-decision";
 import { createDaemonQuitHandler } from "./daemon-quit";
 import { quitConfirmationOptions, quitFailureOptions } from "./daemon-quit-dialogs";
@@ -566,6 +567,18 @@ async function resolveCliBinary(): Promise<string | null> {
         cachedCliBinaryVersion = version;
         return bundled;
       }
+    }
+
+    // Privacy builds run only the CLI compiled from this checkout: no
+    // download from GitHub Releases and no downloaded or PATH copy, which
+    // could be an upstream build.
+    if (PRIVACY_MODE) {
+      console.error(
+        `[daemon] privacy build: no usable bundled CLI at ${bundled}; rebuild it with \`pnpm --filter @multica/desktop bundle-cli\``,
+      );
+      cachedCliBinary = null;
+      cachedCliBinaryVersion = null;
+      return null;
     }
 
     const managed = managedCliPath();
