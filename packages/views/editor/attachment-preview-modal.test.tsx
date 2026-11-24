@@ -5,6 +5,7 @@ import { useState, type ReactElement } from "react";
 import type { Attachment } from "@multica/core/types";
 import { ApiError } from "@multica/core/api/client";
 import { configStore } from "@multica/core/config";
+import { withSandboxCsp } from "./utils/sandbox-csp";
 
 const { openExternalMock, isDesktopShellMock, copyImageMock, copyTextMock, toastMock } =
   vi.hoisted(() => ({
@@ -365,7 +366,7 @@ describe("AttachmentPreviewModal — dispatch", () => {
       // front (utils/iframe-location-bridge.ts) and the fragment-nav shim
       // appended at the end (utils/iframe-fragment-nav.ts).
       expect(frame?.getAttribute("srcdoc")).toBe(
-        withLocationBridge(withFragmentNavShim(withWidthBridge("<p>hi</p>")), ""),
+        withSandboxCsp(withLocationBridge(withFragmentNavShim(withWidthBridge("<p>hi</p>")), "")),
       );
     });
   });
@@ -384,7 +385,7 @@ describe("AttachmentPreviewModal — dispatch", () => {
 
     const frame = document.querySelector("iframe[sandbox]") as HTMLIFrameElement;
     expect(frame.getAttribute("srcdoc")).toBe(
-      withLocationBridge(withFragmentNavShim(withWidthBridge("<p>hi</p>")), "?s=overview"),
+      withSandboxCsp(withLocationBridge(withFragmentNavShim(withWidthBridge("<p>hi</p>")), "?s=overview")),
     );
     expect((input as HTMLInputElement).value).toBe("?s=overview");
   });
@@ -409,7 +410,7 @@ describe("AttachmentPreviewModal — dispatch", () => {
 
     expect(screen.getByLabelText("Address")).toHaveValue("?s=ia");
     expect(document.querySelector("iframe[sandbox]")?.getAttribute("srcdoc")).toBe(
-      withLocationBridge(withFragmentNavShim(withWidthBridge("<p>hi</p>")), "?s=ia"),
+      withSandboxCsp(withLocationBridge(withFragmentNavShim(withWidthBridge("<p>hi</p>")), "?s=ia")),
     );
   });
 

@@ -30,6 +30,7 @@ vi.mock("./code-block-static", () => ({
 
 import { HtmlBlockPreview } from "./html-block-preview";
 import { HTML_BLOCK_MESSAGE_KEY } from "./utils/html-block-document";
+import { withSandboxCsp } from "./utils/sandbox-csp";
 
 let restoreDialog: () => void;
 beforeEach(() => {
@@ -81,7 +82,8 @@ describe("HtmlBlockPreview — frame", () => {
     expect(frame.getAttribute("title")).toBe("HTML preview");
     expect(frame.getAttribute("sandbox")).toBe("allow-scripts");
     const srcdoc = frame.getAttribute("srcdoc") ?? "";
-    expect(srcdoc.startsWith("<style>:root{")).toBe(true);
+    // The sandbox CSP comes first (utils/sandbox-csp.ts), then the theme.
+    expect(srcdoc.startsWith(withSandboxCsp("<style>:root{"))).toBe(true);
     expect(srcdoc).toContain(HTML_BLOCK_MESSAGE_KEY);
     expect(srcdoc).toContain("<p>hi</p>");
     expect(srcdoc).toContain("scrollIntoView");

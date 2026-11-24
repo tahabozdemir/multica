@@ -41,6 +41,7 @@ import {
 import type { HtmlPreviewLocation } from "../editor/hooks/use-html-preview-location";
 import { normalizeHtmlPreviewAddress } from "../editor/utils/iframe-location-bridge";
 import { useHtmlPreviewScrollRestore } from "./use-html-preview-scroll-restore";
+import { withSandboxCsp } from "../editor/utils/sandbox-csp";
 
 /** View-state key the page keeps an HTML file's address under. */
 export const HTML_PREVIEW_ADDRESS_KEY = "html-preview-address";
@@ -149,7 +150,7 @@ function PageHtmlFrame({
       key={`${contentKey}:${location.frameKey}`}
       ref={setFrame}
       onLoad={onLoad}
-      srcDoc={location.withAddress(buildSrcDoc(html))}
+      srcDoc={withSandboxCsp(location.withAddress(buildSrcDoc(html)))}
       sandbox="allow-scripts"
       title={title}
       className="h-full w-full border-0 bg-background"

@@ -24,6 +24,7 @@
 
 import type { CSSProperties, Ref } from "react";
 import { cn } from "@multica/ui/lib/utils";
+import { withSandboxCsp } from "./utils/sandbox-csp";
 
 interface CodeBlockIframeProps {
   /** Document source for srcDoc. Empty string renders a blank frame. */
@@ -54,7 +55,8 @@ export function CodeBlockIframe({
       // opaque origin via sandbox. Critical that we never combine
       // `allow-scripts` with `allow-same-origin` — that pairing defeats the
       // sandbox per the HTML spec (notes on the sandbox attribute).
-      srcDoc={html}
+      // Nothing in the document may reach the network (utils/sandbox-csp.ts).
+      srcDoc={html ? withSandboxCsp(html) : html}
       sandbox="allow-scripts"
       title={title}
       className={cn(

@@ -31,6 +31,7 @@ vi.mock("../mermaid-diagram", async (importOriginal) => ({
 }));
 
 import { createEditorExtensions } from ".";
+import { withSandboxCsp } from "../utils/sandbox-csp";
 
 function TestEditor({ content, onEditor }: { content: JSONContent[]; onEditor: (editor: Editor) => void }) {
   // The editor's real extension set, so other keymaps get their turn first.
@@ -323,7 +324,7 @@ describe("CodeBlockView — ```html in the editor", () => {
     await mount(codeBlock("html", '<input value="initial">'));
     const iframe = frame();
     const before = iframe.getAttribute("srcdoc");
-    expect(before).toMatch(/^<style>:root\{\}<\/style>/);
+    expect(before?.startsWith(withSandboxCsp("<style>:root{}</style>"))).toBe(true);
 
     embedScheme.current = "dark";
     await act(async () => {

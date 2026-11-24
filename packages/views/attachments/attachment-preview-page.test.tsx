@@ -12,6 +12,7 @@ import { buildScrollBridge } from "../editor/utils/iframe-scroll-bridge";
 import { withFragmentNavShim } from "../editor/utils/iframe-fragment-nav";
 import { withWidthBridge } from "../editor/utils/iframe-width-bridge";
 import { withLocationBridge } from "../editor/utils/iframe-location-bridge";
+import { withSandboxCsp } from "../editor/utils/sandbox-csp";
 
 const htmlText = "<html><body><h1>Report</h1></body></html>";
 
@@ -129,7 +130,7 @@ describe("AttachmentPreviewPage", () => {
     const iframe = await screen.findByTitle("report.html");
     // The address bridge and the fragment-nav shim, but no scroll bridge.
     expect(iframe.getAttribute("srcdoc")).toBe(
-      withLocationBridge(withFragmentNavShim(withWidthBridge(htmlText)), ""),
+      withSandboxCsp(withLocationBridge(withFragmentNavShim(withWidthBridge(htmlText)), "")),
     );
   });
 
@@ -137,7 +138,7 @@ describe("AttachmentPreviewPage", () => {
     renderPage(<AttachmentPreviewPage attachmentId="att-1" initialAddress="?s=ia" />);
     const iframe = await screen.findByTitle("report.html");
     expect(iframe.getAttribute("srcdoc")).toBe(
-      withLocationBridge(withFragmentNavShim(withWidthBridge(htmlText)), "?s=ia"),
+      withSandboxCsp(withLocationBridge(withFragmentNavShim(withWidthBridge(htmlText)), "?s=ia")),
     );
     expect(screen.getByRole("textbox", { name: "Address" })).toHaveValue("?s=ia");
   });
@@ -156,7 +157,7 @@ describe("AttachmentPreviewPage", () => {
     );
     const iframe = await screen.findByTitle("report.html");
     expect(iframe.getAttribute("srcdoc")).toBe(
-      withLocationBridge(withFragmentNavShim(withWidthBridge(htmlText)), "?s=kept"),
+      withSandboxCsp(withLocationBridge(withFragmentNavShim(withWidthBridge(htmlText)), "?s=kept")),
     );
 
     const input = screen.getByRole("textbox", { name: "Address" });
