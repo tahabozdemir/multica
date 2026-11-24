@@ -73,6 +73,8 @@ func TestGetConfigIncludesRuntimeAuthConfig(t *testing.T) {
 
 	t.Setenv("ALLOW_SIGNUP", "false")
 	t.Setenv("GOOGLE_CLIENT_ID", "google-client-id")
+	// Upstream behavior: this fork's privacy mode withholds the key.
+	t.Setenv("MULTICA_PRIVACY_MODE", "0")
 	t.Setenv("POSTHOG_API_KEY", "phc_test")
 	t.Setenv("POSTHOG_HOST", "https://eu.i.posthog.com")
 	t.Setenv("MULTICA_DAEMON_SERVER_URL", "")
@@ -709,6 +711,21 @@ func TestGetConfigReportsTheThemeStore(t *testing.T) {
 	testHandler.ThemeStore = store
 	if raw := fetch()["theme_store_enabled"]; string(raw) != "true" {
 		t.Fatalf("theme_store_enabled: want true, got %s", raw)
+	}
+}
+
+func TestGetConfigWithholdsPosthogKeyInPrivacyMode(t *testing.T) {
+	t.Setenv("MULTICA_PRIVACY_MODE", "1")
+	t.Setenv("POSTHOG_API_KEY", "phc_test")
+	t.Setenv("ANALYTICS_DISABLED", "")
+	w := httptest.NewRecorder()
+	testHandler.GetConfig(w, httptest.NewRequest(http.MethodGet, "/api/config", nil))
+	var cfg AppConfig
+	if err := json.Unmarshal(w.Body.Bytes(), &cfg); err != nil {
+		t.Fatalf("decode config: %v", err)
+	}
+	if cfg.PosthogKey != "" || cfg.PosthogHost != "" {
+		t.Fatalf("privacy mode must withhold PostHog config, got key=%q host=%q", cfg.PosthogKey, cfg.PosthogHost)
 	}
 }
 

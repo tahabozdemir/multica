@@ -196,6 +196,7 @@
     "./provider": "./provider.tsx",
     "./logger": "./logger.ts",
     "./ai-traffic": "./ai-traffic/index.ts",
+    "./privacy": "./privacy/index.ts",
     "./utils": "./utils.ts",
     "./security/redact-secrets": "./security/redact-secrets.ts",
     "./constants/*": "./constants/*.ts",

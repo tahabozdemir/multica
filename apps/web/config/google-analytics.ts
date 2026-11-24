@@ -1,4 +1,5 @@
 import { RESERVED_SLUGS } from "@multica/core/paths";
+import { privacyModeFromEnv } from "@multica/core/privacy";
 
 type RuntimeEnv = Record<string, string | undefined>;
 
@@ -17,6 +18,7 @@ const MEASUREMENT_ID_PATTERN = /^G-[A-Z0-9]{4,20}$/;
  * a rebuild.
  */
 export function resolveGoogleAnalyticsId(env: RuntimeEnv): string | undefined {
+  if (privacyModeFromEnv(env)) return undefined;
   const value = env.GOOGLE_ANALYTICS_ID?.trim().toUpperCase();
   if (!value || !MEASUREMENT_ID_PATTERN.test(value)) return undefined;
   return value;

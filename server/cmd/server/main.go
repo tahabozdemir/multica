@@ -27,6 +27,7 @@ import (
 	"github.com/multica-ai/multica/server/internal/logger"
 	"github.com/multica-ai/multica/server/internal/maintenance"
 	obsmetrics "github.com/multica-ai/multica/server/internal/metrics"
+	"github.com/multica-ai/multica/server/internal/privacy"
 	"github.com/multica-ai/multica/server/internal/profiling"
 	"github.com/multica-ai/multica/server/internal/realtime"
 	"github.com/multica-ai/multica/server/internal/scheduler"
@@ -330,7 +331,12 @@ func main() {
 	// Read the opt-out before constructing any telemetry dependency. In the
 	// disabled case no collector or HTTP client is ever created.
 	telemetryConfig := selfhosttelemetry.ConfigFromDoNotTrack(os.Getenv("DO_NOT_TRACK"))
-	selfhosttelemetry.LogStartupStatus(slog.Default(), telemetryConfig)
+	if privacy.Enabled() {
+		telemetryConfig.Enabled = false
+		slog.Info("self-host telemetry disabled via MULTICA_PRIVACY_MODE")
+	} else {
+		selfhosttelemetry.LogStartupStatus(slog.Default(), telemetryConfig)
+	}
 	// Warn about missing configuration
 	if err := jwtSecretBootError(os.Getenv("JWT_SECRET"), os.Getenv("APP_ENV")); err != nil {
 		slog.Error(

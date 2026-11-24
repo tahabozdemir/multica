@@ -7,12 +7,16 @@ import {
   sanitizeAnalyticsUrl,
 } from "./google-analytics";
 
+it("stays off in privacy mode, even with an ID", () => {
+  expect(resolveGoogleAnalyticsId({ GOOGLE_ANALYTICS_ID: "G-RQVF209EHD" })).toBeUndefined();
+});
+
 it("enables only a valid GA4 measurement ID", () => {
   expect(resolveGoogleAnalyticsId({})).toBeUndefined();
-  expect(resolveGoogleAnalyticsId({ GOOGLE_ANALYTICS_ID: " g-rqvf209ehd " })).toBe("G-RQVF209EHD");
+  expect(resolveGoogleAnalyticsId({ MULTICA_PRIVACY_MODE: "0", GOOGLE_ANALYTICS_ID: " g-rqvf209ehd " })).toBe("G-RQVF209EHD");
   // Interpolated into an inline script, so anything else is rejected.
-  expect(resolveGoogleAnalyticsId({ GOOGLE_ANALYTICS_ID: "G-X'); alert(1); //" })).toBeUndefined();
-  expect(resolveGoogleAnalyticsId({ GOOGLE_ANALYTICS_ID: "UA-12345-1" })).toBeUndefined();
+  expect(resolveGoogleAnalyticsId({ MULTICA_PRIVACY_MODE: "0", GOOGLE_ANALYTICS_ID: "G-X'); alert(1); //" })).toBeUndefined();
+  expect(resolveGoogleAnalyticsId({ MULTICA_PRIVACY_MODE: "0", GOOGLE_ANALYTICS_ID: "UA-12345-1" })).toBeUndefined();
 });
 
 it("strips credentials from URLs but keeps campaign params", () => {

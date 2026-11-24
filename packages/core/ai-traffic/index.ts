@@ -4,6 +4,8 @@
  * real-time fetchers do not execute JavaScript.
  */
 
+import { privacyModeFromEnv } from "../privacy";
+
 export type AiAgentKind =
   /** Bulk crawler that collects training data. */
   | "training"
@@ -242,9 +244,10 @@ function analyticsEnvironment(value: string | undefined): AiVisitPostHogConfig["
 /**
  * PostHog settings from the same variables the Go server reads
  * (`server/internal/analytics`): no `POSTHOG_API_KEY`, or
- * `ANALYTICS_DISABLED`, means nothing is sent.
+ * `ANALYTICS_DISABLED`, or privacy mode, means nothing is sent.
  */
 export function aiVisitPostHogConfig(env: Env): AiVisitPostHogConfig | null {
+  if (privacyModeFromEnv(env)) return null;
   const apiKey = env.POSTHOG_API_KEY?.trim();
   const disabled = env.ANALYTICS_DISABLED?.trim().toLowerCase();
   if (!apiKey || disabled === "1" || disabled === "true") return null;

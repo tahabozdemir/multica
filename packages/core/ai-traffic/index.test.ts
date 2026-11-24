@@ -12,6 +12,9 @@ import {
   sendAiVisitToPostHog,
 } from "./index";
 
+// These cases cover upstream behavior, so they turn this fork's privacy mode off.
+const PRIVACY_OFF = { MULTICA_PRIVACY_MODE: "0" } as const;
+
 const CHROME_2026 =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36";
 const CHROME_2017 =
@@ -239,19 +242,24 @@ describe("PostHog retention", () => {
     vi.restoreAllMocks();
   });
 
+  it("sends nothing in privacy mode, even with a key", () => {
+    expect(aiVisitPostHogConfig({ POSTHOG_API_KEY: "phc_test" })).toBeNull();
+    expect(aiVisitPostHogConfig({ POSTHOG_API_KEY: "phc_test", MULTICA_PRIVACY_MODE: "1" })).toBeNull();
+  });
+
   it("reads the same variables as the Go server", () => {
     expect(aiVisitPostHogConfig({})).toBeNull();
-    expect(aiVisitPostHogConfig({ POSTHOG_API_KEY: "phc_test", ANALYTICS_DISABLED: "TRUE" })).toBeNull();
-    expect(aiVisitPostHogConfig({ POSTHOG_API_KEY: " phc_test " })).toEqual({
+    expect(aiVisitPostHogConfig({ ...PRIVACY_OFF, POSTHOG_API_KEY: "phc_test", ANALYTICS_DISABLED: "TRUE" })).toBeNull();
+    expect(aiVisitPostHogConfig({ ...PRIVACY_OFF, POSTHOG_API_KEY: " phc_test " })).toEqual({
       apiKey: "phc_test",
       host: "https://us.i.posthog.com",
       environment: "dev",
     });
     expect(
-      aiVisitPostHogConfig({ POSTHOG_API_KEY: "phc_test", POSTHOG_HOST: "https://eu.i.posthog.com/", APP_ENV: "prod" }),
+      aiVisitPostHogConfig({ ...PRIVACY_OFF, POSTHOG_API_KEY: "phc_test", POSTHOG_HOST: "https://eu.i.posthog.com/", APP_ENV: "prod" }),
     ).toEqual(config);
     expect(
-      aiVisitPostHogConfig({ POSTHOG_API_KEY: "phc_test", ANALYTICS_ENVIRONMENT: "staging", APP_ENV: "production" })
+      aiVisitPostHogConfig({ ...PRIVACY_OFF, POSTHOG_API_KEY: "phc_test", ANALYTICS_ENVIRONMENT: "staging", APP_ENV: "production" })
         ?.environment,
     ).toBe("staging");
   });
@@ -301,11 +309,11 @@ describe("PostHog retention", () => {
     const waitUntil = vi.fn();
 
     reportAiVisit(record, { env: {}, waitUntil, fetch: fetchMock });
-    reportAiVisit(null, { env: { POSTHOG_API_KEY: "phc_test" }, waitUntil, fetch: fetchMock });
+    reportAiVisit(null, { env: { ...PRIVACY_OFF, POSTHOG_API_KEY: "phc_test" }, waitUntil, fetch: fetchMock });
     expect(waitUntil).not.toHaveBeenCalled();
     expect(fetchMock).not.toHaveBeenCalled();
 
-    reportAiVisit(record, { env: { POSTHOG_API_KEY: "phc_test" }, waitUntil, fetch: fetchMock });
+    reportAiVisit(record, { env: { ...PRIVACY_OFF, POSTHOG_API_KEY: "phc_test" }, waitUntil, fetch: fetchMock });
     expect(waitUntil).toHaveBeenCalledWith(expect.any(Promise));
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(console.info).toHaveBeenCalledTimes(2);

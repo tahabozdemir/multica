@@ -126,6 +126,8 @@ describe("docs proxy", () => {
   it("retains visits in PostHog after the response when a key is configured", () => {
     vi.spyOn(console, "info").mockImplementation(() => {});
     vi.stubEnv("POSTHOG_API_KEY", "phc_test");
+    // Upstream behavior; this fork's privacy mode would withhold the capture.
+    vi.stubEnv("MULTICA_PRIVACY_MODE", "0");
     const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response("{}"));
     const waitUntil = vi.fn();
     try {

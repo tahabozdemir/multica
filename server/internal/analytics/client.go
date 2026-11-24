@@ -11,6 +11,8 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"github.com/multica-ai/multica/server/internal/privacy"
 )
 
 // Event is a single analytics capture. Fields mirror PostHog's /capture/ shape
@@ -65,6 +67,10 @@ type Client interface {
 //   - ANALYTICS_DISABLED: set to "true"/"1" to force a no-op client even
 //     when POSTHOG_API_KEY is set (useful for CI and self-hosted opt-out).
 func NewFromEnv() Client {
+	if privacy.Enabled() {
+		slog.Info("analytics disabled via MULTICA_PRIVACY_MODE")
+		return NoopClient{}
+	}
 	if isDisabled() {
 		slog.Info("analytics disabled via ANALYTICS_DISABLED")
 		return NoopClient{}
