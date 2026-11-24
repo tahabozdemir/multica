@@ -8,6 +8,7 @@ import (
 
 	"github.com/multica-ai/multica/server/internal/analytics"
 	"github.com/multica-ai/multica/server/internal/featureflags"
+	"github.com/multica-ai/multica/server/internal/privacy"
 	"github.com/multica-ai/multica/server/internal/storage"
 )
 
@@ -58,6 +59,11 @@ type AppConfig struct {
 	// (an invalid MULTICA_THEME_REGISTRY_URL), and older servers omit it too,
 	// so the app shows no Browse entry and makes no store requests.
 	ThemeStoreEnabled bool `json:"theme_store_enabled,omitempty"`
+
+	// PrivacyMode mirrors MULTICA_PRIVACY_MODE so the app skips requests to
+	// third parties (GitHub release and star lookups). Always present: the
+	// app treats an absent field as on.
+	PrivacyMode bool `json:"privacy_mode"`
 
 	// PostHog public config for the frontend. The key is the same Project
 	// API Key the backend uses; returning it here (instead of baking it
@@ -155,6 +161,7 @@ func (h *Handler) GetConfig(w http.ResponseWriter, r *http.Request) {
 	config.DaemonSetupTarget = "self_host"
 	config.VCSIntegrationAvailable = h.cfg.VCSIntegrationEnabled
 	config.ThemeStoreEnabled = h.ThemeStore != nil
+	config.PrivacyMode = privacy.Enabled()
 	config.FeatureFlags = featureflags.EvaluateFrontendPublicFlags(r.Context(), h.FeatureFlags)
 	config.FeatureFlags[WorkspaceGuestsConfigKey] = h.guestsReleased(r.Context())
 	// Only surface the build version on self-hosted deployments. The managed

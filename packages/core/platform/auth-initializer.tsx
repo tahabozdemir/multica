@@ -123,6 +123,7 @@ export function AuthInitializer({
             cfg.comment_delete_keep_replies_supported === true,
           );
         configStore.getState().setThemeStoreEnabled(cfg.theme_store_enabled === true);
+        configStore.getState().setPrivacyMode(cfg.privacy_mode !== false);
         if (cfg.posthog_key) {
           initAnalytics({
             key: cfg.posthog_key,

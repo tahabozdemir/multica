@@ -1088,6 +1088,9 @@ export interface AppConfigResponse {
    * /api/theme-store. Off when the operator turned it off, and absent on older
    * servers, so the app shows no Browse entry and makes no store requests. */
   theme_store_enabled?: boolean;
+  /** Whether the server runs in privacy mode (this fork's MULTICA_PRIVACY_MODE).
+   * Absent means on, so the app never contacts third parties on a guess. */
+  privacy_mode?: boolean;
   server_version?: string;
 }
 
@@ -1380,6 +1383,7 @@ export const AppConfigSchema = z.object({
   issue_create_properties_supported: BooleanWithDefaultSchema(false),
   comment_delete_keep_replies_supported: BooleanWithDefaultSchema(false),
   theme_store_enabled: BooleanWithDefaultSchema(false),
+  privacy_mode: BooleanWithDefaultSchema(true),
   server_version: OptionalStringSchema,
 }).loose();
 
@@ -1405,6 +1409,8 @@ export const EMPTY_APP_CONFIG: AppConfigResponse = {
   // Fail closed: old servers delete a comment's replies with it.
   comment_delete_keep_replies_supported: false,
   theme_store_enabled: false,
+  // Fail closed: an unreadable config must not let the app reach third parties.
+  privacy_mode: true,
   feature_flags: {},
 };
 

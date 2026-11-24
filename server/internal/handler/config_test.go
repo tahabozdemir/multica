@@ -712,6 +712,28 @@ func TestGetConfigReportsTheThemeStore(t *testing.T) {
 	}
 }
 
+func TestGetConfigReportsPrivacyMode(t *testing.T) {
+	fetch := func() string {
+		t.Helper()
+		w := httptest.NewRecorder()
+		testHandler.GetConfig(w, httptest.NewRequest(http.MethodGet, "/api/config", nil))
+		var cfg map[string]json.RawMessage
+		if err := json.Unmarshal(w.Body.Bytes(), &cfg); err != nil {
+			t.Fatalf("decode config: %v", err)
+		}
+		return string(cfg["privacy_mode"])
+	}
+
+	t.Setenv("MULTICA_PRIVACY_MODE", "")
+	if got := fetch(); got != "true" {
+		t.Fatalf("privacy_mode by default: want true, got %q", got)
+	}
+	t.Setenv("MULTICA_PRIVACY_MODE", "0")
+	if got := fetch(); got != "false" {
+		t.Fatalf("privacy_mode when turned off: want false, got %q", got)
+	}
+}
+
 func TestGetConfigDashboardHistory365dFlagCanBeTurnedOff(t *testing.T) {
 	h := &Handler{}
 	withFeatureFlag(t, h, featureflags.DashboardHistory365d, false)

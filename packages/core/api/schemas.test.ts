@@ -1466,6 +1466,20 @@ describe("AppConfigSchema agent_conversation_starters_supported drift", () => {
   });
 });
 
+describe("AppConfigSchema privacy_mode drift", () => {
+  it("defaults to on when the server omits it", () => {
+    expect(AppConfigSchema.parse({}).privacy_mode).toBe(true);
+  });
+
+  it("stays on for a malformed declaration", () => {
+    expect(AppConfigSchema.parse({ privacy_mode: "no" }).privacy_mode).toBe(true);
+  });
+
+  it("turns off only on an explicit false", () => {
+    expect(AppConfigSchema.parse({ privacy_mode: false }).privacy_mode).toBe(false);
+  });
+});
+
 describe("AppConfigSchema issue_create_properties_supported drift", () => {
   it("defaults to false when the server predates atomic create properties", () => {
     expect(AppConfigSchema.parse({}).issue_create_properties_supported).toBe(false);
