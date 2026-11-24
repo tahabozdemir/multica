@@ -1,5 +1,13 @@
 import "@testing-library/jest-dom/vitest";
 import "@multica/vitest-setup/web-storage";
+import { beforeEach } from "vitest";
+import { configStore } from "@multica/core/config";
+
+// Upstream suites cover upstream behavior, so this fork's privacy mode starts
+// off in every test; privacy suites turn it on with setPrivacyMode(true).
+beforeEach(() => {
+  configStore.getState().setPrivacyMode(false);
+});
 
 // Everything below patches gaps in jsdom. Pure-logic suites opt out of jsdom
 // with `// @vitest-environment node` and share this file, so there is no DOM to

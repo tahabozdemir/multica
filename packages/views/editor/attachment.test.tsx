@@ -791,6 +791,28 @@ describe("Attachment — image dispatch", () => {
     expect(downloadMock).not.toHaveBeenCalled();
   });
 
+  it("privacy mode renders an external image as a link and loads nothing", () => {
+    configStore.getState().setPrivacyMode(true);
+    renderWithQuery(
+      <Attachment
+        attachment={{ kind: "url", url: "https://tracker.example/pixel.png", filename: "chart", forceKind: "image" }}
+      />,
+    );
+    expect(document.querySelector("img")).toBeNull();
+    const link = screen.getByRole("link", { name: "chart" });
+    expect(link.getAttribute("href")).toBe("https://tracker.example/pixel.png");
+  });
+
+  it("privacy mode still shows images served by the local backend", () => {
+    configStore.getState().setPrivacyMode(true);
+    renderWithQuery(
+      <Attachment
+        attachment={{ kind: "url", url: "http://localhost:8080/uploads/ws/shot.png", filename: "shot.png" }}
+      />,
+    );
+    expect(document.querySelector("img")?.getAttribute("src")).toBe("http://localhost:8080/uploads/ws/shot.png");
+  });
+
   it("uploading image renders no toolbar (loader state)", () => {
     renderWithQuery(
       <Attachment

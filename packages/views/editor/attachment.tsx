@@ -324,6 +324,7 @@ export function Attachment({
   const { resolveAttachment, openByUrl } = useAttachmentDownloadResolver();
   const cdnDomain = useConfigStore((s) => s.cdnDomain);
   const cdnSigned = useConfigStore((s) => s.cdnSigned);
+  const privacyMode = useConfigStore((s) => s.privacyMode);
   const download = useDownloadAttachment();
   const preview = useAttachmentPreview();
   const sequence = usePreviewSequence();
@@ -460,6 +461,16 @@ export function Attachment({
     return { contentActions };
   }, { content: !editable });
 
+  // Privacy mode: an image hosted elsewhere renders as a link, so viewing
+  // the comment sends nothing to that host until the reader opens it.
+  if (kind === "image" && privacyMode && !state.attachmentId && isRemoteImageUrl(mediaUrl, cdnDomain)) {
+    return (
+      <a href={mediaUrl} target="_blank" rel="noopener noreferrer" className={cn("break-all", className)}>
+        {state.filename || mediaUrl}
+      </a>
+    );
+  }
+
   if (kind === "image") {
     const openImageMenu = (event: MouseEvent<HTMLElement>) => {
       if (yieldsToTextMenu(event.target as Element)) return;
@@ -592,6 +603,26 @@ interface ImageAttachmentViewProps {
   /** Registers the image with the right-click menu. */
   scopeRef?: (element: HTMLElement | null) => void;
   className?: string;
+}
+
+/**
+ * An absolute http(s) image URL on a host other than this page, a local
+ * backend, or the configured CDN: loading it would contact a third party.
+ */
+export function isRemoteImageUrl(src: string | undefined, cdnDomain: string): boolean {
+  if (!src) return false;
+  let url: URL;
+  try {
+    url = new URL(src);
+  } catch {
+    return false;
+  }
+  if (url.protocol !== "http:" && url.protocol !== "https:") return false;
+  const host = url.hostname.toLowerCase();
+  if (host === "localhost" || host === "127.0.0.1" || host === "[::1]") return false;
+  if (typeof window !== "undefined" && url.host === window.location.host) return false;
+  if (cdnDomain && host === cdnDomain.toLowerCase()) return false;
+  return true;
 }
 
 function ImageAttachmentView({
