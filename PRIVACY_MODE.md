@@ -66,3 +66,25 @@ Upstream test suites run with privacy mode off (`TestMain` in the affected Go
 packages, `packages/views/test/setup.ts`, and per-file mocks in the desktop
 app), so they keep covering upstream behavior. Tests named for privacy mode
 turn it on explicitly.
+
+## Moving a workspace off Multica Cloud
+
+`scripts/cloud-migrate.mjs` copies one workspace in two steps:
+
+```sh
+# 1. Read-only: GET requests to the source; writes a snapshot folder (mode 0700).
+node scripts/cloud-migrate.mjs export --source-profile desktop-api.multica.ai --workspace <slug> --out ~/multica-cloud-export
+# 2. Writes into a NEW workspace on your local server (loopback targets only).
+node scripts/cloud-migrate.mjs import --in ~/multica-cloud-export --target-profile <local-profile> --dry-run
+node scripts/cloud-migrate.mjs import --in ~/multica-cloud-export --target-profile <local-profile>
+```
+
+It copies issues (numbers preserved), comments and threads, attachments,
+projects, labels, custom statuses, skills, agent definitions, and docs when
+Docs is on (`FF_DOCS_V1=true`). It starts no agent work: no issue is assigned to
+an agent, mentions of agents and people become plain text, and the run ends by
+checking that the workspace has no agent tasks. Authors, assignees, and dates
+the API cannot set are kept as a note on each issue and comment. Agent secrets
+(custom env, MCP config), custom properties, reactions, chat history, and run
+history are not copied. Agents need a local runtime: start the daemon after the
+first import and run the same import command again.
