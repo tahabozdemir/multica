@@ -98,6 +98,7 @@
     "./runtimes/queries": "./runtimes/queries.ts",
     "./runtimes/mutations": "./runtimes/mutations.ts",
     "./runtimes/custom-pricing-store": "./runtimes/custom-pricing-store.ts",
+    "./local-changes/review-store": "./local-changes/review-store.ts",
     "./runtimes/rate-limits": "./runtimes/rate-limits.ts",
     "./dashboard": "./dashboard/index.ts",
     "./dashboard/queries": "./dashboard/queries.ts",
