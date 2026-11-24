@@ -40,6 +40,20 @@ describe("loadRuntimeConfig", () => {
     });
   });
 
+  it("fails closed when packaged config is absent in privacy mode", async () => {
+    const dir = await mkdtemp(join(tmpdir(), "multica-desktop-config-"));
+    const configPath = join(dir, "missing.json");
+    const result = await loadRuntimeConfig({ isDev: false, configPath, env: {}, privacyMode: true });
+    expect(result.ok).toBe(false);
+    expect(!result.ok && result.error.message).toContain(configPath);
+  });
+
+  it("fails closed by default (privacy build)", async () => {
+    const dir = await mkdtemp(join(tmpdir(), "multica-desktop-config-"));
+    const result = await loadRuntimeConfig({ isDev: false, configPath: join(dir, "missing.json"), env: {} });
+    expect(result.ok).toBe(false);
+  });
+
   it("uses cloud defaults when packaged config is absent", async () => {
     const dir = await mkdtemp(join(tmpdir(), "multica-desktop-config-"));
     await expect(
@@ -47,6 +61,7 @@ describe("loadRuntimeConfig", () => {
         isDev: false,
         configPath: join(dir, "missing.json"),
         env: {},
+        privacyMode: false,
       }),
     ).resolves.toEqual({
       ok: true,

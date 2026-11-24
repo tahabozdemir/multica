@@ -9,11 +9,14 @@ import {
   type RuntimeConfigEnv,
   type RuntimeConfigResult,
 } from "../shared/runtime-config";
+import { PRIVACY_MODE } from "../shared/privacy";
 
 export async function loadRuntimeConfig(options: {
   isDev: boolean;
   env: RuntimeConfigEnv;
   configPath?: string;
+  /** Defaults to the build's privacy switch. */
+  privacyMode?: boolean;
 }): Promise<RuntimeConfigResult> {
   if (options.isDev) {
     try {
@@ -29,6 +32,15 @@ export async function loadRuntimeConfig(options: {
     return { ok: true, config: parseRuntimeConfig(raw) };
   } catch (err) {
     if (isMissingFileError(err)) {
+      // Privacy mode fails closed: a missing file must never mean Cloud.
+      if (options.privacyMode ?? PRIVACY_MODE) {
+        return {
+          ok: false,
+          error: {
+            message: `Missing ${configPath}. This build never connects to Multica Cloud on its own. Create the file with {"schemaVersion":1,"apiUrl":"http://localhost:8080","appUrl":"http://localhost:3000"} and restart Multica.`,
+          },
+        };
+      }
       return { ok: true, config: { ...DEFAULT_RUNTIME_CONFIG } };
     }
     return {
