@@ -1,6 +1,28 @@
 // @vitest-environment node
-import { describe, expect, it } from "vitest";
-import { formatStarCount } from "./stars";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { configStore } from "../config";
+import { fetchGithubStars, formatStarCount } from "./stars";
+
+describe("fetchGithubStars", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    configStore.getState().setPrivacyMode(true);
+  });
+
+  it("makes no request in privacy mode", async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    configStore.getState().setPrivacyMode(true);
+    expect(await fetchGithubStars()).toBeNull();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("reads the count from GitHub with privacy mode off", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ stargazers_count: 42 }))));
+    configStore.getState().setPrivacyMode(false);
+    expect(await fetchGithubStars()).toBe(42);
+  });
+});
 
 describe("formatStarCount", () => {
   it("renders counts below 1,000 exactly", () => {

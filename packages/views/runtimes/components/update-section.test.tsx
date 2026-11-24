@@ -3,6 +3,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { api, ApiError } from "@multica/core/api";
+import { configStore } from "@multica/core/config";
 import type { RuntimeUpdate } from "@multica/core/types";
 import { I18nProvider } from "@multica/core/i18n/react";
 import enCommon from "../../locales/en/common.json";
@@ -38,9 +39,26 @@ function renderSection(props: {
   );
 }
 
+// Upstream behavior; this fork's privacy mode is covered below.
+beforeEach(() => {
+  configStore.getState().setPrivacyMode(false);
+});
+
 afterEach(() => {
   cleanup();
   vi.unstubAllGlobals();
+  configStore.getState().setPrivacyMode(true);
+});
+
+describe("UpdateSection in privacy mode", () => {
+  it("never asks GitHub for the latest release", async () => {
+    configStore.getState().setPrivacyMode(true);
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    renderSection({ runtimeId: "rt-privacy", currentVersion: "v0.4.0" });
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
 });
 
 describe("UpdateSection read-only status", () => {

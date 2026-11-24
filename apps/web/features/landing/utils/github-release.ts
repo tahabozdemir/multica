@@ -1,3 +1,4 @@
+import { privacyModeFromEnv } from "@multica/core/privacy";
 import {
   hasCompleteAssetSet,
   parseReleaseAssets,
@@ -60,6 +61,8 @@ interface GitHubReleasePayload {
 }
 
 export async function fetchLatestRelease(): Promise<LatestRelease> {
+  // Privacy mode: the Next server makes no request to api.github.com.
+  if (privacyModeFromEnv(process.env)) return emptyRelease();
   const headers: Record<string, string> = {
     Accept: "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28",

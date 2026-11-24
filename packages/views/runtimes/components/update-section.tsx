@@ -10,6 +10,7 @@ import {
 } from "@multica/ui/icons";
 import { Button } from "@multica/ui/components/ui/button";
 import { api, ApiError } from "@multica/core/api";
+import { configStore } from "@multica/core/config";
 import type { RuntimeUpdate, RuntimeUpdateStatus } from "@multica/core/types";
 import { useT } from "../../i18n";
 
@@ -21,6 +22,8 @@ let cachedLatestVersion: string | null = null;
 let cachedAt = 0;
 
 async function fetchLatestVersion(): Promise<string | null> {
+  // Privacy mode: no request to api.github.com, so no "update available".
+  if (configStore.getState().privacyMode) return null;
   if (cachedLatestVersion && Date.now() - cachedAt < CACHE_TTL_MS) {
     return cachedLatestVersion;
   }

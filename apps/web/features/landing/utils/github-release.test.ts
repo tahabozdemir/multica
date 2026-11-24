@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fetchLatestRelease, RELEASE_TIMEOUT_MS } from "./github-release";
 
 /** The twelve desktop artifacts a finished release carries. */
@@ -55,9 +55,26 @@ function mockFetchWithReleases(releases: unknown[]) {
   return fetchMock;
 }
 
+// Upstream behavior; this fork's privacy mode is covered at the end.
+beforeEach(() => {
+  vi.stubEnv("MULTICA_PRIVACY_MODE", "0");
+});
+
 afterEach(() => {
   vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
   vi.restoreAllMocks();
+});
+
+describe("fetchLatestRelease in privacy mode", () => {
+  it("makes no request and returns the empty release", async () => {
+    vi.stubEnv("MULTICA_PRIVACY_MODE", "1");
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    const result = await fetchLatestRelease();
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(result.version).toBeFalsy();
+  });
 });
 
 describe("fetchLatestRelease", () => {

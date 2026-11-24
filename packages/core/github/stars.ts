@@ -1,4 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
+import { configStore } from "../config";
 
 export const MULTICA_GITHUB_REPO = "multica-ai/multica";
 export const MULTICA_GITHUB_URL = `https://github.com/${MULTICA_GITHUB_REPO}`;
@@ -10,6 +11,8 @@ export const MULTICA_GITHUB_URL = `https://github.com/${MULTICA_GITHUB_REPO}`;
  * spends their own IP's anonymous rate limit instead of a shared server one.
  */
 export async function fetchGithubStars(): Promise<number | null> {
+  // Privacy mode: no request to api.github.com; callers show the label alone.
+  if (configStore.getState().privacyMode) return null;
   try {
     const res = await fetch(`https://api.github.com/repos/${MULTICA_GITHUB_REPO}`, {
       headers: { Accept: "application/vnd.github+json" },
