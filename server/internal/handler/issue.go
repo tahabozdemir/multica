@@ -3350,7 +3350,8 @@ func (h *Handler) CreateIssue(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadRequest, "invalid request body")
 		return
 	}
-	req.Title = sanitizeNullBytes(req.Title)
+	req.Title = redactAgentWrite(r, sanitizeNullBytes(req.Title))
+	req.Description = redactAgentWritePtr(r, req.Description)
 
 	if req.Title == "" {
 		writeError(w, http.StatusBadRequest, "title is required")
@@ -4071,9 +4072,9 @@ func (h *Handler) UpdateIssue(w http.ResponseWriter, r *http.Request) {
 	}
 	// PostgreSQL TEXT rejects NUL, which survives a JSON round trip. The bases
 	// are compared with the stored text, so they are cleaned the same way.
-	req.Title = sanitizeNullBytesPtr(req.Title)
+	req.Title = redactAgentWritePtr(r, sanitizeNullBytesPtr(req.Title))
 	req.TitleBase = sanitizeNullBytesPtr(req.TitleBase)
-	req.Description = sanitizeNullBytesPtr(req.Description)
+	req.Description = redactAgentWritePtr(r, sanitizeNullBytesPtr(req.Description))
 	req.DescriptionBase = sanitizeNullBytesPtr(req.DescriptionBase)
 
 	if _, ok := h.parseBlockerIDs(w, req.BlockedBy); !ok {

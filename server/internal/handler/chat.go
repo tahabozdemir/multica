@@ -892,6 +892,7 @@ func (h *Handler) SendChatMessage(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadRequest, "invalid request body")
 		return
 	}
+	req.Content = redactAgentWrite(r, req.Content)
 	if req.Content == "" && req.SubmissionID == nil {
 		writeError(w, http.StatusBadRequest, "content is required")
 		return
