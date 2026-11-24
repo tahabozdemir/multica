@@ -3,6 +3,11 @@ import { electronAPI } from "@electron-toolkit/preload";
 import type { RuntimeConfigResult } from "../shared/runtime-config";
 import type { FreezeBreadcrumb } from "../shared/freeze-breadcrumb";
 import type {
+  LocalGitAgentBranchOptions,
+  LocalGitOpenFileRequest,
+  LocalGitWorkingCopyOptions,
+} from "../shared/local-git";
+import type {
   ManualUpdateCheckResult,
   UpdaterDownloadState,
   UpdaterPreferences,
@@ -292,11 +297,19 @@ const desktopAPI = {
   validateLocalDirectory: (path: string) =>
     ipcRenderer.invoke("local-directory:validate", path),
   /** Uncommitted changes in a local folder, read with git on this machine. */
-  readLocalWorkingCopy: (path: string) =>
-    ipcRenderer.invoke("local-git:working-copy", path),
-  /** What an agent branch in a local folder's repo would merge into HEAD. */
-  readLocalAgentBranch: (path: string, branch: string) =>
-    ipcRenderer.invoke("local-git:agent-branch", path, branch),
+  readLocalWorkingCopy: (path: string, options?: LocalGitWorkingCopyOptions) =>
+    ipcRenderer.invoke("local-git:working-copy", path, options),
+  /** What an agent branch in a local folder's repo would merge into its default branch. */
+  readLocalAgentBranch: (path: string, branch: string, options?: LocalGitAgentBranchOptions) =>
+    ipcRenderer.invoke("local-git:agent-branch", path, branch, options),
+  /** Every agent branch in a local folder's repo, with its size. */
+  listLocalAgentBranches: (path: string) =>
+    ipcRenderer.invoke("local-git:agent-branches", path),
+  /** Open a changed file in an editor or Finder. */
+  openLocalFile: (request: LocalGitOpenFileRequest) =>
+    ipcRenderer.invoke("local-git:open-file", request),
+  /** Which editors this Mac can open a changed file in. */
+  localEditors: () => ipcRenderer.invoke("local-git:editors"),
   /** Read every theme in the themes folder, and start watching it. */
   readThemeFolder: (): Promise<ThemeFolderSnapshot> =>
     ipcRenderer.invoke(THEME_FOLDER_READ_CHANNEL),

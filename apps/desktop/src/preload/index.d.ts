@@ -4,7 +4,16 @@ import type { NavigationGesture } from "../shared/navigation-gestures";
 import type { ContextMenuCommand, ContextMenuRequest } from "../shared/context-menu";
 import type { RendererRouteContextInput } from "../shared/renderer-route-context";
 import type { FreezeBreadcrumb } from "../shared/freeze-breadcrumb";
-import type { LocalGitAgentBranchResult, LocalGitWorkingCopyResult } from "../shared/local-git";
+import type {
+  LocalGitAgentBranchOptions,
+  LocalGitAgentBranchResult,
+  LocalGitAgentBranchesResult,
+  LocalGitEditor,
+  LocalGitOpenFileRequest,
+  LocalGitOpenFileResult,
+  LocalGitWorkingCopyOptions,
+  LocalGitWorkingCopyResult,
+} from "../shared/local-git";
 import type {
   DesktopWindowContext,
   IssueWindowRequest,
@@ -138,9 +147,19 @@ interface DesktopAPI {
     is_git_repo?: boolean;
   }>;
   /** Uncommitted changes in a local folder, read with git on this machine. */
-  readLocalWorkingCopy: (path: string) => Promise<LocalGitWorkingCopyResult>;
-  /** What an agent branch in a local folder's repo would merge into HEAD. */
-  readLocalAgentBranch: (path: string, branch: string) => Promise<LocalGitAgentBranchResult>;
+  readLocalWorkingCopy: (path: string, options?: LocalGitWorkingCopyOptions) => Promise<LocalGitWorkingCopyResult>;
+  /** What an agent branch in a local folder's repo would merge into its default branch. */
+  readLocalAgentBranch: (
+    path: string,
+    branch: string,
+    options?: LocalGitAgentBranchOptions,
+  ) => Promise<LocalGitAgentBranchResult>;
+  /** Every agent branch in a local folder's repo, with its size. */
+  listLocalAgentBranches: (path: string) => Promise<LocalGitAgentBranchesResult>;
+  /** Open a changed file in an editor or Finder. */
+  openLocalFile: (request: LocalGitOpenFileRequest) => Promise<LocalGitOpenFileResult>;
+  /** Which editors this Mac can open a changed file in. */
+  localEditors: () => Promise<LocalGitEditor[]>;
   /** Read every theme in the themes folder in user data, and start watching it. */
   readThemeFolder: () => Promise<ThemeFolderSnapshot>;
   /** Called once a change in the themes folder settles. Returns an unsubscribe function. */

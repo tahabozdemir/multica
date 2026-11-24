@@ -45,6 +45,7 @@ export type LocalGitFailureReason =
   | "no_commits"
   | "branch_not_found"
   | "git_unavailable"
+  | "editor_unavailable"
   | "error";
 
 export interface LocalGitFailure {
@@ -75,18 +76,83 @@ export interface LocalGitCommit {
   sha: string;
   subject: string;
   origin: LocalGitCommitOrigin;
+  /**
+   * An equivalent change is already on the default branch. The Merger
+   * cherry-picks agent commits, so this, not ancestry, is what "merged" means.
+   */
+  in_default: boolean;
 }
 
 export interface LocalGitAgentBranch {
   ok: true;
   branch: string;
-  /** The branch tip is already part of the checked-out HEAD. */
+  /** The branch agent work is merged into: main, else master, else HEAD. */
+  default_branch: string;
+  /** Every agent commit already has an equivalent on the default branch. */
   merged: boolean;
-  /** Commits not yet in HEAD, oldest first. */
+  /** The files include the uncommitted state of the run's live worktree. */
+  live: boolean;
+  /** A run has this branch checked out right now, so its files are on disk. */
+  worktree_available: boolean;
+  /** Commits from the baseline on, oldest first. */
   commits: LocalGitCommit[];
+  /** The commit this diff shows on its own, when one was asked for. */
+  commit: string | null;
   files: LocalGitDiffFile[];
   truncated: boolean;
 }
 
+export interface LocalGitAgentBranchOptions {
+  /** Show one commit of the branch on its own. */
+  commit?: string;
+  /** Limit the diff to one repository-relative path. */
+  file?: string;
+  /** With `file`: the whole file as context instead of three lines. */
+  fullContext?: boolean;
+  /** Include the live worktree's uncommitted and untracked changes. */
+  live?: boolean;
+}
+
+export interface LocalGitWorkingCopyOptions {
+  file?: string;
+  fullContext?: boolean;
+}
+
+export interface LocalGitBranchSummary {
+  name: string;
+  /** Lowercase issue key the branch was created for (`siri-118`), if any. */
+  issue_key: string | null;
+  /** The sanitized agent name segment of the branch. */
+  agent_segment: string;
+  /** Agent id from the daemon's branch record; may belong to another server. */
+  agent_id: string | null;
+  merged: boolean;
+  live: boolean;
+  files: number;
+  additions: number;
+  deletions: number;
+}
+
+export interface LocalGitAgentBranches {
+  ok: true;
+  default_branch: string;
+  branches: LocalGitBranchSummary[];
+}
+
+export type LocalGitEditor = "xcode" | "vscode" | "finder";
+
+export interface LocalGitOpenFileRequest {
+  /** The project folder; the file is resolved inside its repository. */
+  folder: string;
+  /** Open the file from this branch's live worktree instead of the folder. */
+  branch?: string;
+  /** Repository-relative path. */
+  path: string;
+  line?: number;
+  app: LocalGitEditor;
+}
+
 export type LocalGitWorkingCopyResult = LocalGitWorkingCopy | LocalGitFailure;
 export type LocalGitAgentBranchResult = LocalGitAgentBranch | LocalGitFailure;
+export type LocalGitAgentBranchesResult = LocalGitAgentBranches | LocalGitFailure;
+export type LocalGitOpenFileResult = { ok: true } | LocalGitFailure;
