@@ -24,6 +24,10 @@ const ctx = vi.hoisted(() => ({
   userDataPath: "",
 }));
 
+// Upstream updater behavior; this fork's privacy build is covered in
+// updater-privacy.test.ts.
+vi.mock("../shared/privacy", () => ({ PRIVACY_MODE: false }));
+
 vi.mock("electron-updater", () => {
   let channel: string | undefined;
   const autoUpdater = {

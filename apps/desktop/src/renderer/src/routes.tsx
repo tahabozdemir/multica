@@ -37,6 +37,7 @@ import { useT } from "@multica/views/i18n";
 import { Download, Server } from "@multica/ui/icons";
 import { DaemonSettingsTab } from "./components/daemon-settings-tab";
 import { UpdatesSettingsTab } from "./components/updates-settings-tab";
+import { PRIVACY_MODE } from "../../shared/privacy";
 import { WorkspaceRouteLayout } from "./components/workspace-route-layout";
 import { DesktopRouteErrorPage } from "./components/route-error-page";
 import { IssueViewUrlSync } from "./platform/issue-view-tabs";
@@ -61,12 +62,17 @@ function DesktopSettingsRoute() {
           icon: Server,
           content: <DaemonSettingsTab />,
         },
-        {
-          value: "updates",
-          label: t(($) => $.desktop.tabs.updates),
-          icon: Download,
-          content: <UpdatesSettingsTab />,
-        },
+        // Privacy builds never check for updates, so there is nothing to show.
+        ...(PRIVACY_MODE
+          ? []
+          : [
+              {
+                value: "updates",
+                label: t(($) => $.desktop.tabs.updates),
+                icon: Download,
+                content: <UpdatesSettingsTab />,
+              },
+            ]),
       ]}
     />
   );

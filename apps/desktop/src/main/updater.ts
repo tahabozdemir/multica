@@ -13,6 +13,7 @@ import {
 } from "./updater-preferences";
 import type { DaemonInstallPrep } from "./update-install-gate";
 import { classifyUpdaterError } from "./updater-errors";
+import { PRIVACY_MODE } from "../shared/privacy";
 import { type DialogLocale, resolveDialogLocale } from "./dialog-locale";
 
 // Silent background updates: electron-updater downloads on its own as soon
@@ -75,6 +76,28 @@ export interface UpdaterDaemonGate {
 export interface SetupAutoUpdaterOptions {
   daemonGate?: UpdaterDaemonGate;
   platform?: NodeJS.Platform;
+  /** Defaults to the build's privacy switch. */
+  privacyMode?: boolean;
+}
+
+const PRIVACY_UPDATES_DISABLED = "Updates are disabled in this privacy build. Rebuild Multica from your checkout to update.";
+
+// Privacy builds never ask GitHub Releases for updates: electron-updater is
+// never called, and the renderer's updater IPC gets answers that need no
+// network.
+function registerDisabledUpdaterIpc(): void {
+  ipcMain.handle("updater:get-download-state", (): UpdaterDownloadState => ({ status: "idle" }));
+  ipcMain.handle("updater:download", () => {
+    throw new Error(PRIVACY_UPDATES_DISABLED);
+  });
+  ipcMain.handle("updater:install", () => undefined);
+  ipcMain.handle("updater:get-preferences", () => ({ automaticUpdates: false }));
+  ipcMain.handle("updater:set-automatic-updates", () => ({ automaticUpdates: false }));
+  ipcMain.handle("updater:check", (): ManualUpdateCheckResult => ({
+    ok: false,
+    error: PRIVACY_UPDATES_DISABLED,
+    reason: "unavailable",
+  }));
 }
 
 const BUSY_INSTALL_COPY: Record<
@@ -204,6 +227,10 @@ export function setupAutoUpdater(
   getMainWindows: () => readonly BrowserWindow[],
   options: SetupAutoUpdaterOptions = {},
 ): void {
+  if (options.privacyMode ?? PRIVACY_MODE) {
+    registerDisabledUpdaterIpc();
+    return;
+  }
   // Every main window mounts the update banner, so each one hears progress.
   const broadcast = (channel: RendererChannel, payload: unknown) => {
     for (const win of getMainWindows()) sendToLiveRenderer(win, channel, payload);
