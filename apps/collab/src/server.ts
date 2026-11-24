@@ -94,6 +94,7 @@ export function createCollabServer(
 
   const server = new Server<ConnectionContext>({
     port: config.port,
+    address: config.host,
     quiet: true,
     debounce: config.storeDebounceMs,
     maxDebounce: config.storeMaxDebounceMs,

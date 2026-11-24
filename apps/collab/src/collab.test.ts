@@ -103,7 +103,7 @@ beforeAll(async () => {
   apiUrl = `http://127.0.0.1:${(apiServer.address() as AddressInfo).port}`;
 
   collab = createCollabServer(
-    { port: 0, secret: SECRET, apiUrl, cdnDomain: "", storeDebounceMs: 100, storeMaxDebounceMs: 400 },
+    { port: 0, host: "127.0.0.1", secret: SECRET, apiUrl, cdnDomain: "", storeDebounceMs: 100, storeMaxDebounceMs: 400 },
     codec,
     silent,
   );
@@ -613,7 +613,7 @@ describe("access after joining", () => {
 
   beforeAll(async () => {
     access = createCollabServer(
-      { port: 0, secret: SECRET, apiUrl, cdnDomain: "", storeDebounceMs: 100, storeMaxDebounceMs: 400 },
+      { port: 0, host: "127.0.0.1", secret: SECRET, apiUrl, cdnDomain: "", storeDebounceMs: 100, storeMaxDebounceMs: 400 },
       codec,
       silent,
       { refreshLeadMs: 1500, revalidateGraceMs: 300, sweepMs: 50 },

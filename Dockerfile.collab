@@ -38,6 +38,8 @@ RUN apk add --no-cache "libcrypto3>=3.5.8-r0" "libssl3>=3.5.8-r0"
 
 ENV NODE_ENV=production
 ENV COLLAB_PORT=8095
+# Reachable from the backend container; compose never publishes this port.
+ENV MULTICA_BIND_HOST=0.0.0.0
 
 WORKDIR /app
 COPY --from=deps /app ./

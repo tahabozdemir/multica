@@ -41,6 +41,9 @@ COPY LICENSE NOTICE ./
 COPY docker/entrypoint.sh .
 RUN sed -i 's/\r$//' entrypoint.sh && chmod +x entrypoint.sh
 
+# Listen on every interface inside the container; compose publishes the port
+# on the host's 127.0.0.1 only.
+ENV MULTICA_BIND_HOST=0.0.0.0
 EXPOSE 8080
 
 ENTRYPOINT ["./entrypoint.sh"]

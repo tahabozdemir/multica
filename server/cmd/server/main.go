@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -324,6 +325,19 @@ func newMainHTTPServer(addr string, handler http.Handler) *http.Server {
 		ReadHeaderTimeout: 5 * time.Second,
 		IdleTimeout:       120 * time.Second,
 	}
+}
+
+// listenHost is the interface the API listens on. MULTICA_BIND_HOST wins;
+// otherwise privacy mode keeps the API on loopback and upstream behavior
+// (every interface) applies. Containers set MULTICA_BIND_HOST=0.0.0.0.
+func listenHost() string {
+	if host := strings.TrimSpace(os.Getenv("MULTICA_BIND_HOST")); host != "" {
+		return host
+	}
+	if privacy.Enabled() {
+		return "127.0.0.1"
+	}
+	return ""
 }
 
 func main() {
@@ -726,7 +740,7 @@ func main() {
 	// the scheduler's Run goroutine starts so the field write is race-free.
 	heartbeatScheduler.RecoveryNotifier = h
 
-	srv := newMainHTTPServer(":"+port, r)
+	srv := newMainHTTPServer(net.JoinHostPort(listenHost(), port), r)
 	profilingServer := profiling.NewServer()
 	maintenanceServer, maintenanceErr := maintenance.NewServer(os.Getenv("MAINTENANCE_PORT"), maintenance.NewService(pool, maintenance.StatusCategory{}))
 	if maintenanceErr != nil {

@@ -3,6 +3,9 @@
  *  needs Hocuspocus's Redis extension or routing by doc id first. */
 export interface CollabConfig {
   port: number;
+  /** Interface to listen on: MULTICA_BIND_HOST, else loopback in this fork's
+   *  privacy mode (containers set MULTICA_BIND_HOST=0.0.0.0). */
+  host: string;
   /** Shared with the Go API: signs editor tickets and authenticates the
    *  internal calls in both directions. */
   secret: string;
@@ -24,10 +27,19 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): CollabConfig {
   if (!apiUrl) throw new Error("MULTICA_API_URL is required");
   return {
     port: Number(env.COLLAB_PORT || 8095),
+    host: bindHost(env),
     secret,
     apiUrl,
     cdnDomain: env.MULTICA_CDN_DOMAIN?.trim() ?? "",
     storeDebounceMs: Number(env.COLLAB_STORE_DEBOUNCE_MS || 5000),
     storeMaxDebounceMs: Number(env.COLLAB_STORE_MAX_DEBOUNCE_MS || 30000),
   };
+}
+
+function bindHost(env: NodeJS.ProcessEnv): string {
+  const explicit = env.MULTICA_BIND_HOST?.trim();
+  if (explicit) return explicit;
+  const privacy = env.MULTICA_PRIVACY_MODE?.trim().toLowerCase();
+  const privacyOff = privacy === "0" || privacy === "false" || privacy === "off" || privacy === "no";
+  return privacyOff ? "0.0.0.0" : "127.0.0.1";
 }
