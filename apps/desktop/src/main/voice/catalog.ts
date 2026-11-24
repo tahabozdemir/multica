@@ -4,6 +4,8 @@
  * serve them without being trusted.
  */
 
+import { PRIVACY_MODE } from "../../shared/privacy";
+
 export interface CatalogFile {
   name: string;
   size: number;
@@ -28,8 +30,13 @@ export interface CatalogModel {
   files: CatalogFile[];
 }
 
-/** Tried in order; each serves `{base}/{repo}/resolve/{revision}/{file}`. */
-export const MODEL_MIRRORS = ["https://huggingface.co", "https://hf-mirror.com"];
+/** Tried in order; each serves `{base}/{repo}/resolve/{revision}/{file}`.
+ *  Privacy builds use Hugging Face only, never the third-party hf-mirror.com. */
+export const MODEL_MIRRORS = modelMirrors(PRIVACY_MODE);
+
+export function modelMirrors(privacyMode: boolean): string[] {
+  return privacyMode ? ["https://huggingface.co"] : ["https://huggingface.co", "https://hf-mirror.com"];
+}
 
 export const VOICE_MODELS: readonly CatalogModel[] = [
   {
