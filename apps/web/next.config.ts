@@ -7,6 +7,7 @@ import {
   resolveDocsUrl,
   resolveRemoteApiUrl,
 } from "./config/runtime-urls";
+import { privacyModeEnabled, webContentSecurityPolicy } from "./config/content-security-policy";
 import { createMDX } from "fumadocs-mdx/next";
 
 // Load root .env so local next.config.ts rewrites see REMOTE_API_URL / DOCS_URL.
@@ -61,6 +62,13 @@ const nextConfig: NextConfig = {
       { pathname: "/images/**", search: "" },
       { pathname: "/usecases/**", search: "" },
     ],
+  },
+  // Privacy mode: the page may only fetch from this origin and the configured
+  // backend (config/content-security-policy.ts).
+  async headers() {
+    if (!privacyModeEnabled(process.env)) return [];
+    const policy = webContentSecurityPolicy(process.env, { dev: isDev, backendUrl: remoteApiUrl });
+    return [{ source: "/:path*", headers: [{ key: "Content-Security-Policy", value: policy }] }];
   },
   async rewrites() {
     return {
