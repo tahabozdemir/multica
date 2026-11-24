@@ -41,6 +41,7 @@ export type LocalGitFailureReason =
   | "no_commits"
   | "branch_not_found"
   | "git_unavailable"
+  | "editor_unavailable"
   | "unsupported"
   | "error";
 
@@ -57,26 +58,79 @@ export interface LocalGitCommit {
   sha: string;
   subject: string;
   origin: LocalGitCommitOrigin;
+  /** An equivalent change is already on the default branch. */
+  in_default: boolean;
 }
 
 export type LocalGitWorkingCopyResult =
   | { ok: true; branch: string | null; files: LocalGitDiffFile[]; truncated: boolean }
   | LocalGitFailure;
 
-export type LocalGitAgentBranchResult =
-  | {
-      ok: true;
-      branch: string;
-      merged: boolean;
-      commits: LocalGitCommit[];
-      files: LocalGitDiffFile[];
-      truncated: boolean;
-    }
+export interface LocalGitAgentBranch {
+  ok: true;
+  branch: string;
+  default_branch: string;
+  merged: boolean;
+  live: boolean;
+  worktree_available: boolean;
+  commits: LocalGitCommit[];
+  commit: string | null;
+  files: LocalGitDiffFile[];
+  truncated: boolean;
+}
+
+export type LocalGitAgentBranchResult = LocalGitAgentBranch | LocalGitFailure;
+
+export interface LocalGitAgentBranchOptions {
+  commit?: string;
+  file?: string;
+  fullContext?: boolean;
+  live?: boolean;
+}
+
+export interface LocalGitWorkingCopyOptions {
+  file?: string;
+  fullContext?: boolean;
+}
+
+export interface LocalGitBranchSummary {
+  name: string;
+  issue_key: string | null;
+  agent_segment: string;
+  agent_id: string | null;
+  merged: boolean;
+  live: boolean;
+  files: number;
+  additions: number;
+  deletions: number;
+}
+
+export type LocalGitAgentBranchesResult =
+  | { ok: true; default_branch: string; branches: LocalGitBranchSummary[] }
   | LocalGitFailure;
 
+export type LocalGitEditor = "xcode" | "vscode" | "finder";
+
+export interface LocalGitOpenFileRequest {
+  folder: string;
+  branch?: string;
+  path: string;
+  line?: number;
+  app: LocalGitEditor;
+}
+
+export type LocalGitOpenFileResult = { ok: true } | LocalGitFailure;
+
 interface DesktopLocalGitAPI {
-  readLocalWorkingCopy?: (path: string) => Promise<LocalGitWorkingCopyResult>;
-  readLocalAgentBranch?: (path: string, branch: string) => Promise<LocalGitAgentBranchResult>;
+  readLocalWorkingCopy?: (path: string, options?: LocalGitWorkingCopyOptions) => Promise<LocalGitWorkingCopyResult>;
+  readLocalAgentBranch?: (
+    path: string,
+    branch: string,
+    options?: LocalGitAgentBranchOptions,
+  ) => Promise<LocalGitAgentBranchResult>;
+  listLocalAgentBranches?: (path: string) => Promise<LocalGitAgentBranchesResult>;
+  openLocalFile?: (request: LocalGitOpenFileRequest) => Promise<LocalGitOpenFileResult>;
+  localEditors?: () => Promise<LocalGitEditor[]>;
 }
 
 function readDesktopAPI(): DesktopLocalGitAPI | undefined {
@@ -93,17 +147,44 @@ export function canReadLocalGit(): boolean {
   );
 }
 
-export async function readLocalWorkingCopy(path: string): Promise<LocalGitWorkingCopyResult> {
+/** Whether this shell can summarise agent branches (needed by the issue section and card badge). */
+export function canListLocalAgentBranches(): boolean {
+  return canReadLocalGit() && typeof readDesktopAPI()?.listLocalAgentBranches === "function";
+}
+
+export async function readLocalWorkingCopy(
+  path: string,
+  options?: LocalGitWorkingCopyOptions,
+): Promise<LocalGitWorkingCopyResult> {
   const api = readDesktopAPI();
   if (!api?.readLocalWorkingCopy) return { ok: false, reason: "unsupported" };
-  return api.readLocalWorkingCopy(path);
+  return api.readLocalWorkingCopy(path, options);
 }
 
 export async function readLocalAgentBranch(
   path: string,
   branch: string,
+  options?: LocalGitAgentBranchOptions,
 ): Promise<LocalGitAgentBranchResult> {
   const api = readDesktopAPI();
   if (!api?.readLocalAgentBranch) return { ok: false, reason: "unsupported" };
-  return api.readLocalAgentBranch(path, branch);
+  return api.readLocalAgentBranch(path, branch, options);
+}
+
+export async function listLocalAgentBranches(path: string): Promise<LocalGitAgentBranchesResult> {
+  const api = readDesktopAPI();
+  if (!api?.listLocalAgentBranches) return { ok: false, reason: "unsupported" };
+  return api.listLocalAgentBranches(path);
+}
+
+export async function openLocalFile(request: LocalGitOpenFileRequest): Promise<LocalGitOpenFileResult> {
+  const api = readDesktopAPI();
+  if (!api?.openLocalFile) return { ok: false, reason: "unsupported" };
+  return api.openLocalFile(request);
+}
+
+export async function localEditors(): Promise<LocalGitEditor[]> {
+  const api = readDesktopAPI();
+  if (!api?.localEditors) return [];
+  return api.localEditors();
 }

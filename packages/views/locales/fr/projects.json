@@ -319,7 +319,6 @@
     "files_count_other": "{{count}} fichiers",
     "empty_working_copy": "Aucun changement non commité.",
     "empty_branch": "Cette branche ne modifie aucun fichier.",
-    "merged": "Cette branche est déjà fusionnée dans la branche actuelle du dossier.",
     "carried_over_note": "Inclut votre propre travail non commité, reporté d'une exécution à l'autre.",
     "truncated": "Certains changements sont trop volumineux pour être affichés.",
     "file_truncated": "La suite de ce fichier est trop volumineuse pour être affichée.",
@@ -345,6 +344,24 @@
       "git_unavailable": "Git est introuvable sur cet ordinateur.",
       "unsupported": "Disponible dans l'application de bureau.",
       "generic": "Impossible de lire les changements."
-    }
+    },
+    "layout_label": "Disposition du diff",
+    "layout_unified": "Unifié",
+    "layout_split": "Côte à côte",
+    "live": "En direct",
+    "live_hint": "Se met à jour pendant que l'agent travaille",
+    "viewed": "Vu",
+    "viewed_progress": "{{viewed}} sur {{total}} vus",
+    "files_label": "Fichiers modifiés",
+    "show_full_file": "Afficher le fichier entier",
+    "show_changes_only": "Afficher seulement les changements",
+    "open_in": "Ouvrir dans",
+    "open_xcode": "Ouvrir dans Xcode",
+    "open_vscode": "Ouvrir dans VS Code",
+    "open_finder": "Afficher dans le Finder",
+    "open_failed": "Impossible d'ouvrir le fichier.",
+    "all_changes": "Tous les changements",
+    "in_default": "Dans {{branch}}",
+    "merged_into": "Tout le contenu de cette branche est déjà dans {{branch}}."
   }
 }

@@ -319,7 +319,6 @@
     "files_count_other": "{{count}} files",
     "empty_working_copy": "No uncommitted changes.",
     "empty_branch": "This branch changes no files.",
-    "merged": "This branch is already merged into the folder's current branch.",
     "carried_over_note": "Includes your own uncommitted work that was carried over between runs.",
     "truncated": "Some changes are too large to show.",
     "file_truncated": "The rest of this file is too large to show.",
@@ -345,6 +344,24 @@
       "git_unavailable": "Git was not found on this computer.",
       "unsupported": "Available in the desktop app.",
       "generic": "Couldn't read the changes."
-    }
+    },
+    "layout_label": "Diff layout",
+    "layout_unified": "Unified",
+    "layout_split": "Side by side",
+    "live": "Live",
+    "live_hint": "Updates while the agent works",
+    "viewed": "Viewed",
+    "viewed_progress": "{{viewed}} of {{total}} viewed",
+    "files_label": "Changed files",
+    "show_full_file": "Show full file",
+    "show_changes_only": "Show changes only",
+    "open_in": "Open in",
+    "open_xcode": "Open in Xcode",
+    "open_vscode": "Open in VS Code",
+    "open_finder": "Reveal in Finder",
+    "open_failed": "Couldn't open the file.",
+    "all_changes": "All changes",
+    "in_default": "In {{branch}}",
+    "merged_into": "Everything on this branch is already in {{branch}}."
   }
 }

@@ -309,7 +309,6 @@
     "files_count_other": "{{count}} 个文件",
     "empty_working_copy": "没有未提交的变更。",
     "empty_branch": "此分支没有修改任何文件。",
-    "merged": "此分支已合并到文件夹的当前分支。",
     "carried_over_note": "包含在多次运行之间延续下来的、你自己未提交的工作。",
     "truncated": "部分变更过大，无法显示。",
     "file_truncated": "此文件的其余部分过大，无法显示。",
@@ -335,6 +334,24 @@
       "git_unavailable": "这台电脑上找不到 git。",
       "unsupported": "可在桌面应用中使用。",
       "generic": "无法读取变更。"
-    }
+    },
+    "layout_label": "差异视图",
+    "layout_unified": "合并",
+    "layout_split": "并排",
+    "live": "实时",
+    "live_hint": "智能体工作时会持续更新",
+    "viewed": "已查看",
+    "viewed_progress": "已查看 {{viewed}}/{{total}}",
+    "files_label": "已更改的文件",
+    "show_full_file": "显示完整文件",
+    "show_changes_only": "只显示变更",
+    "open_in": "打开方式",
+    "open_xcode": "在 Xcode 中打开",
+    "open_vscode": "在 VS Code 中打开",
+    "open_finder": "在访达中显示",
+    "open_failed": "无法打开该文件。",
+    "all_changes": "全部变更",
+    "in_default": "已在 {{branch}} 中",
+    "merged_into": "此分支的全部内容都已在 {{branch}} 中。"
   }
 }

@@ -17,11 +17,18 @@ export {
   type ValidateLocalDirectoryResult,
 } from "./local-directory";
 export {
+  canListLocalAgentBranches,
   canReadLocalGit,
+  listLocalAgentBranches,
+  localEditors,
+  openLocalFile,
   readLocalAgentBranch,
   readLocalWorkingCopy,
   type LocalGitAgentBranchResult,
+  type LocalGitAgentBranchesResult,
+  type LocalGitBranchSummary,
   type LocalGitDiffFile,
+  type LocalGitEditor,
   type LocalGitWorkingCopyResult,
 } from "./local-git";
 export {

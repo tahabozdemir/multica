@@ -309,7 +309,6 @@
     "files_count_other": "파일 {{count}}개",
     "empty_working_copy": "커밋하지 않은 변경 사항이 없습니다.",
     "empty_branch": "이 브랜치는 파일을 변경하지 않습니다.",
-    "merged": "이 브랜치는 이미 폴더의 현재 브랜치에 병합되었습니다.",
     "carried_over_note": "실행 사이에 이어진, 직접 작업한 커밋하지 않은 변경 사항이 포함되어 있습니다.",
     "truncated": "일부 변경 사항은 너무 커서 표시할 수 없습니다.",
     "file_truncated": "이 파일의 나머지 부분은 너무 커서 표시할 수 없습니다.",
@@ -335,6 +334,24 @@
       "git_unavailable": "이 컴퓨터에서 git을 찾을 수 없습니다.",
       "unsupported": "데스크톱 앱에서 사용할 수 있습니다.",
       "generic": "변경 사항을 읽을 수 없습니다."
-    }
+    },
+    "layout_label": "비교 보기 방식",
+    "layout_unified": "통합",
+    "layout_split": "나란히",
+    "live": "실시간",
+    "live_hint": "에이전트가 작업하는 동안 업데이트됩니다",
+    "viewed": "확인함",
+    "viewed_progress": "{{total}}개 중 {{viewed}}개 확인함",
+    "files_label": "변경된 파일",
+    "show_full_file": "전체 파일 보기",
+    "show_changes_only": "변경 사항만 보기",
+    "open_in": "열기",
+    "open_xcode": "Xcode에서 열기",
+    "open_vscode": "VS Code에서 열기",
+    "open_finder": "Finder에서 보기",
+    "open_failed": "파일을 열 수 없습니다.",
+    "all_changes": "모든 변경 사항",
+    "in_default": "{{branch}}에 반영됨",
+    "merged_into": "이 브랜치의 모든 내용이 이미 {{branch}}에 있습니다."
   }
 }

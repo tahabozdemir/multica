@@ -309,7 +309,6 @@
     "files_count_other": "{{count}} 個檔案",
     "empty_working_copy": "沒有未提交的變更。",
     "empty_branch": "此分支沒有修改任何檔案。",
-    "merged": "此分支已合併到資料夾的目前分支。",
     "carried_over_note": "包含在多次執行之間延續下來、你自己未提交的工作。",
     "truncated": "部分變更過大，無法顯示。",
     "file_truncated": "此檔案的其餘部分過大，無法顯示。",
@@ -335,6 +334,24 @@
       "git_unavailable": "這台電腦上找不到 git。",
       "unsupported": "可在桌面應用程式中使用。",
       "generic": "無法讀取變更。"
-    }
+    },
+    "layout_label": "差異檢視",
+    "layout_unified": "合併",
+    "layout_split": "並排",
+    "live": "即時",
+    "live_hint": "代理工作時會持續更新",
+    "viewed": "已檢視",
+    "viewed_progress": "已檢視 {{viewed}}/{{total}}",
+    "files_label": "已變更的檔案",
+    "show_full_file": "顯示完整檔案",
+    "show_changes_only": "只顯示變更",
+    "open_in": "開啟方式",
+    "open_xcode": "在 Xcode 中開啟",
+    "open_vscode": "在 VS Code 中開啟",
+    "open_finder": "在 Finder 中顯示",
+    "open_failed": "無法開啟檔案。",
+    "all_changes": "全部變更",
+    "in_default": "已在 {{branch}} 中",
+    "merged_into": "此分支的全部內容都已在 {{branch}} 中。"
   }
 }

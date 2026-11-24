@@ -309,7 +309,6 @@
     "files_count_other": "{{count}} 個のファイル",
     "empty_working_copy": "未コミットの変更はありません。",
     "empty_branch": "このブランチはファイルを変更していません。",
-    "merged": "このブランチはフォルダーの現在のブランチにすでにマージされています。",
     "carried_over_note": "実行の間に引き継がれた、あなた自身の未コミットの作業を含みます。",
     "truncated": "一部の変更は大きすぎるため表示できません。",
     "file_truncated": "このファイルの残りは大きすぎるため表示できません。",
@@ -335,6 +334,24 @@
       "git_unavailable": "このコンピューターで git が見つかりません。",
       "unsupported": "デスクトップアプリで利用できます。",
       "generic": "変更を読み込めませんでした。"
-    }
+    },
+    "layout_label": "差分の表示",
+    "layout_unified": "統合",
+    "layout_split": "左右に並べる",
+    "live": "ライブ",
+    "live_hint": "エージェントの作業中に更新されます",
+    "viewed": "確認済み",
+    "viewed_progress": "{{total}} 件中 {{viewed}} 件確認済み",
+    "files_label": "変更されたファイル",
+    "show_full_file": "ファイル全体を表示",
+    "show_changes_only": "変更のみ表示",
+    "open_in": "開く",
+    "open_xcode": "Xcode で開く",
+    "open_vscode": "VS Code で開く",
+    "open_finder": "Finder で表示",
+    "open_failed": "ファイルを開けませんでした。",
+    "all_changes": "すべての変更",
+    "in_default": "{{branch}} に反映済み",
+    "merged_into": "このブランチの内容はすべて {{branch}} に反映済みです。"
   }
 }
